@@ -1,0 +1,36 @@
+{% import "macros.html" as macros %}
+
+{% extends "base.html" %}
+
+{% block social_media_image %}
+  {% if page.extra.social_media_image %}
+    {% set image = resize_image(path=page.extra.social_media_image, width=1200, op="fit_width") %}
+    <meta property="og:image" content="{{ image.url | safe }}" />
+  {% endif %}
+{% endblock social_media_image %}
+
+{% block content %}
+<div class="uk-container uk-container-xsmall">
+  <article class="uk-article">
+
+    <h1 class="uk-article-title"><a class="uk-link-reset" href="">{{ page.title }}</a></h1>
+
+    <p class="uk-article-meta">
+      {% if page.description %}
+        <h2>
+          {{ page.description }}
+        </h2>
+      {% endif %}
+      {{ page.date | date(format="%B %d, %Y") }}
+      {% if page.extra.authors %}
+        - {{ page.extra.authors }}
+      {% endif %}
+    </p>
+
+    <hr>
+
+    {{ page.content | replace(from="<!-- toc -->", to=macros::toc(page=page)) | safe }}
+
+  </article>
+</div>
+{% endblock content %}

@@ -1,0 +1,525 @@
+sections:
+  - name: AI stuff
+    links:
+      - url: https://www.oneusefulthing.org/p/getting-started-with-ai-good-enough
+        text: "Getting started with AI: Good enough prompting"
+      - url: https://llmlitigation.com
+        text: LLM litigation
+      - url: https://www.wired.com/story/matthew-butterick-ai-copyright-lawsuits-openai-meta/
+        text: Meet the Lawyer Leading the Human Resistance Against AI
+  - name: Books
+    links:
+      - url: https://natureofcode.com
+        text: The Nature of Code
+      - url: https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book.html
+        text: The Structure and Interpretation of Computer Programs
+      - url: https://statsthinking21.github.io/statsthinking21-core-site/
+        text: Statistical Thinking for the 21st Century
+      - url: https://rap4mads.eu
+        text: Building Reproducible Analytical Pipelines
+      - url: https://math.mit.edu/~gs/learningfromdata/
+        text: Linear Algebra and Learning from Data
+      - url: https://gameprogrammingpatterns.com/contents.html
+        text: Game Programming Patterns
+      - url: https://probml.github.io/pml-book/book1.html
+        text: "Probabilistic Machine Learning: An Introduction"
+      - url: https://eglerean.github.io/aiqualitative/index.html
+        text: "AI for Qualitative Data Analysis: A Practical Guide for Researchers"
+      - url: https://book.sciml.ai
+        text: Parallel Computing and Scientific Machine Learning
+      - url: http://martin.zinkevich.org/rules_of_ml/rules_of_ml.pdf
+        text: Best Practices for ML Engineering
+      - url: https://bookdown.org/home/tags/statistics/
+        text: Books about statistics
+  - name: Category theory
+    links:
+      - url: https://www.infoq.com/presentations/category-theory-propositions-principle/
+        text: Category Theory for the Working Hacker
+  - name: CMake
+    links:
+      - url: https://www.youtube.com/watch?v=TqjtN8NGtl4
+        text: Building Science with CMake
+      - url: https://samthursfield.wordpress.com/2015/10/20/some-cmake-tips/
+        text: Some CMake tips
+      - url: https://samthursfield.wordpress.com/2015/11/21/cmake-dependencies-between-targets-and-files-and-custom-commands/
+        text: 'CMake: dependencies between targets and files and custom commands'
+      - url: https://github.com/onqtam/awesome-cmake
+        text: A curated list of awesome CMake resources
+  - name: Code development
+    links:
+      - url: http://vimcasts.org
+        text: Free screencasts about the text editor Vim
+      - url: http://lucumr.pocoo.org/2013/8/18/beautiful-native-libraries/
+        text: Beautiful Native Libraries
+      - url: http://hintjens.com/blog:98
+        text: Ten Habits of a Good Programmer
+      - url: http://demangler.com
+        text: GCC and MSVC C++ Demangler
+  - name: Code review
+    links:
+      - url: https://about.gitlab.com/2015/08/05/6-reasons-why-pre-is-better-than-post-production-code-review/
+        text: 6 reasons why pre is better than post production code review
+      - url: https://blog.jasonmeridth.com/posts/do-not-issue-pull-requests-from-your-master-branch/
+        text: Do Not Issue Pull Requests From Your Master Branch
+  - name: Comics
+    links:
+      - url: http://pbfcomics.com
+        text: The Perry Bible Fellowship
+      - url: http://www.smbc-comics.com
+        text: Saturday Morning Breakfast Cereal
+      - url: http://www.lunarbaboon.com
+        text: Lunarbaboon
+      - url: http://www.incidentalcomics.com
+        text: Incidental comics
+  - name: Computing
+    links:
+      - url: https://cpu.land
+        text: Putting the "You" in CPU
+  - name: Conferences
+    links:
+      - url: https://foss.events
+        text: FOSS events
+      - url: https://lessobvious.cc
+        text: The Less Obvious Conference Checklist
+      - url: https://pretix.eu/about/en/
+        text: Ticketing software
+      - url: http://hintjens.com/blog:107
+        text: Ten Steps to Better Public Speaking
+  - name: Data
+    links:
+      - url: http://openrefine.org
+        text: OpenRefine
+  - name: Documentation
+    links:
+      - url: http://www.writethedocs.org/guide/
+        text: Write the Docs
+      - url: http://scholarlymarkdown.com
+        text: Scholarly markdown
+  - name: Fortran
+    links:
+      - url: http://www.ibiblio.org/pub/languages/fortran/ch1-8.html
+        text: Fortran common pitfalls
+      - url: http://www.fortran90.org/src/best-practices.html
+        text: Fortran Best Practices
+      - url: http://flibs.sourceforge.net/guidelines.html
+        text: Possible guidelines for reviewing Fortran code
+      - url: https://github.com/ARCHER2-HPC/archer2-fortran-intro
+        text: Introduction to Modern Fortran
+      - url: https://arstechnica.com/science/2014/05/scientific-computings-future-can-any-coding-language-top-a-1950s-behemoth/
+        text: Can any coding language top a 1950s behemoth?
+  - name: Functional programming
+    links:
+      - url: https://maryrosecook.com/blog/post/a-practical-introduction-to-functional-programming
+        text: A practical introduction to functional programming
+      - url: http://fsharpforfunandprofit.com/series/thinking-functionally.html
+        text: The "Thinking functionally" series
+  - name: Fun for geeks
+    links:
+      - url: http://www.ioccc.org
+        text: The International Obfuscated C Code Contest
+      - url: https://archive.org/details/internetarcade/
+        text: The Internet Archive Software Collection
+      - url: https://archive.org/details/softwarelibrary_msdos_games/v2/
+        text: The Internet Archive MSDOS Games Collection
+      - url: http://www.bobhobbs.com/files/kr_lovecraft.html
+        text: Recursion in C
+      - url: http://www.cs.unm.edu/~dlchao/flake/doom/
+        text: Doom as a tool for system administration
+      - url: http://www.wolframalpha.com/input/?i=batman+equation
+        text: Batman equation
+      - url: https://gundersen.net/functional-floppy-disks-in-2015/
+        text: Functional Floppy Disks - in 2015
+      - url: https://dev.to/rly
+        text: O RLY Cover Generator
+      - url: https://joelgrus.com/2016/05/23/fizz-buzz-in-tensorflow/
+        text: Fizz Buzz in Tensorflow
+      - url: http://svdictionary.com
+        text: Silicon Valley Dictionary
+      - url: https://www.thisiscolossal.com/2017/03/miniature-retro-papercraft-synthesizers-by-dan-mcpharlin/
+        text: Miniature Retro Papercraft Synthesizers by Dan McPharlin
+      - url: https://github-roast.pages.dev
+        text: GitHub Roaster
+  - name: Games
+    links:
+      - url: http://dmle.sourceforge.net
+        text: Dungeon Master - Open Edition
+      - url: https://www.cgwmuseum.org
+        text: Computer Gaming World Museum
+      - url: https://www.indieretronews.com
+        text: Indie Retro News
+      - url: https://online-go.com
+        text: Online Go
+  - name: Git
+    links:
+      - url: https://ohmygit.org/
+        text: Oh My Git!
+      - url: http://pcottle.github.io/learnGitBranching/
+        text: Learn Git branching
+      - url: http://git-man-page-generator.lokaltog.net
+        text: Git man page generator
+      - url: http://whatthecommit.com
+        text: What the commit
+      - url: http://git-scm.com/book
+        text: The entire Pro Git book, written by Scott Chacon and Ben Straub
+      - url: http://nvie.com/posts/a-successful-git-branching-model/
+        text: A successful Git branching model
+      - url: http://www.youtube.com/watch?v=4XpnKHJAok8
+        text: 'Tech Talk: Linus Torvalds on Git'
+      - url: http://sethrobertson.github.io/GitBestPractices/
+        text: 'Commit Often, Perfect Later, Publish Once: Git Best Practices'
+      - url: https://github.com/pluralsight/git-internals-pdf
+        text: Git Internals
+      - url: https://www.youtube.com/watch?v=U8GBXvdmHT4
+        text: 'Webcast: The Basics of Git and GitHub'
+      - url: https://zachholman.com/talk/how-github-uses-github-to-build-github/
+        text: How GitHub Uses GitHub to Build GitHub
+      - url: https://jenkins.io/blog/2013/11/25/summary-report-git-repository-disruption-incident-of-nov-10th/
+        text: 'Summary Report: Git Repository Disruption Incident of Nov 10th'
+      - url: http://dymitruk.com/blog/2012/02/05/branch-per-feature/
+        text: Branch-per-Feature
+      - url: http://xkcd.com/1597/
+        text: Git on XKCD
+      - url: http://fle.github.io/an-efficient-git-workflow-for-midlong-term-projects.html
+        text: An efficient GIT workflow for mid/long term projects
+      - url: http://ohshitgit.com
+        text: Oh shit, git!
+      - url: https://github.com/jesseduffield/lazygit
+        text: Simple terminal UI for Git commands
+      - url: https://about.gitlab.com/2016/07/27/the-11-rules-of-gitlab-flow/
+        text: What are GitLab Flow best practices?
+  - name: Graphics
+    links:
+      - url: https://medium.com/@fogleman/voxel-rendering-techniques-fa8d869457ca
+        text: Voxel Rendering Techniques
+      - url: https://make8bitart.com
+        text: Make 8-bit art!
+      - url: https://lospec.com
+        text: Lospec, a home for digitally restrictive art
+      - url: https://www.aseprite.org
+        text: Animated Spite Editor & Pixel Art Tool
+  - name: Haskell
+    links:
+      - url: http://stefan.saasen.me/articles/git-clone-in-haskell-from-the-bottom-up/
+        text: Reimplementing 'git clone' in Haskell from the bottom up
+      - url: http://cheatsheet.codeslower.com
+        text: The Haskell Cheatsheet
+      - url: http://haskellbook.com
+        text: Haskell Programming from first principles
+      - url: https://gumroad.com/l/maybe-haskell/
+        text: Maybe Haskell - Programming Without Null
+      - url: http://www.happylearnhaskelltutorial.com/contents.html
+        text: Happy Learn Haskell Tutorial
+  - name: Internet
+    links:
+      - url: https://howdns.works
+        text: A fun and colorful explanation of how DNS works
+      - url: https://messwithdns.net/
+        text: Mess with DNS
+      - url: https://99percentinvisible.org/episode/the-lost-cities-of-geo/
+        text: The Lost Cities of Geo
+      - url: http://deletedcity.net
+        text: Deleted City
+  - name: JavaScript
+    links:
+      - url: http://eloquentjavascript.net
+        text: Eloquent JavaScript
+      - url: http://momentjs.com
+        text: Parse, validate, manipulate, and display dates in JavaScript
+      - url: http://yehudakatz.com/2011/08/12/understanding-prototypes-in-javascript/
+        text: Understanding "Prototypes" in JavaScript
+      - url: https://theintern.github.io
+        text: Intern - Software testing for humans
+      - url: http://leafletjs.com
+        text: Leaflet
+      - url: https://medium.com/@thomasfuchs/what-if-we-had-a-great-standard-library-in-javascript-52692342ee3f
+        text: What if we had a great standard library in JavaScript?
+      - url: https://riccardoscalco.it/textures/
+        text: Textures.js
+      - url: https://www.bryanbraun.com/anchorjs/
+        text: AnchorJS
+  - name: Learning programming
+    links:
+      - url: https://de-rse.org/learn-and-teach/
+        text: Learning and teaching research software engineering
+      - url: https://programminghistorian.org/
+        text: Programming Historian
+      - url: https://pll.harvard.edu/course/cs50-introduction-computer-science
+        text: "CS50: Introduction to Computer Science"
+  - name: Linux and shell
+    links:
+      - url: https://effective-shell.com
+        text: Effective Shell
+      - url: https://linuxjourney.com
+        text: Learn the ways of Linux-fu, for free
+      - url: https://www.shellcheck.net
+        text: ShellCheck
+      - url: https://wiki.osuosl.org/howtos/ssh_key_tutorial.html
+        text: SSH key tutorial
+      - url: https://overthewire.org/wargames/
+        text: Wargames by OverTheWire
+      - url: https://risanb.com/code/backup-restore-gpg-key/
+        text: How to Backup and Restore Your GPG Key
+      - url: https://google.github.io/styleguide/shellguide.html
+        text: Google Shell Style Guide
+      - url: https://tldp.org/LDP/abs/html/
+        text: Advanced Bash-Scripting Guide
+  - name: Music
+    links:
+      - url: https://en.wikipedia.org/wiki/Nurse_with_Wound_list
+        text: Nurse with Wound list
+  - name: Open science
+    links:
+      - url: https://opensource.com/business/10/8/barriers-open-science-big-business-watson-and-crick
+        text: Barriers to open science
+      - url: http://www.sciencemag.org/careers/2010/04/scientists-embrace-openness
+        text: Scientists Embrace Openness
+      - url: http://jakevdp.github.io/blog/2013/10/26/big-data-brain-drain/
+        text: 'The Big Data Brain Drain: Why Science is in Trouble'
+      - url: http://www.bcl.hamilton.ie/~barak/how-to-review.html
+        text: How to Review a Scientific Paper
+      - url: https://journal.trialanderror.org/pub/the-invisible-workload/release/1
+        text: The Invisible Workload of Open Research
+  - name: Open source
+    links:
+      - url: https://www.fordfoundation.org/about/library/reports-and-studies/roads-and-bridges-the-unseen-labor-behind-our-digital-infrastructure/
+        text: 'Roads and Bridges: The Unseen Labor Behind Our Digital Infrastructure'
+      - url: http://tom.preston-werner.com/2011/11/22/open-source-everything.html
+        text: Open Source (Almost) Everything
+      - url: http://aosabook.org
+        text: The Architecture of Open Source Applications
+      - url: http://opensoul.org/99ways/
+        text: 99 ways to ruin an open source project
+      - url: http://www.oreilly.com/openbook/osfreesoft/
+        text: Understanding Open Source and Free Software Licensing
+      - url: https://tldrlegal.com
+        text: Software Licenses in Plain English
+  - name: People with interesting blogs
+    links:
+      - url: http://people.sc.fsu.edu/~jburkardt/
+        text: John Burkardt
+      - url: https://maryrosecook.com
+        text: Mary Rose Cook
+      - url: http://hintjens.com
+        text: Pieter Hintjens
+      - url: http://blog.reverberate.org
+        text: Josh Haberman
+      - url: https://danielskatzblog.wordpress.com/
+        text: Daniel S. Katz's blog
+      - url: https://simonwillison.net
+        text: Simon Willison
+      - url: https://jvns.ca
+        text: Julia Evans
+      - url: https://xeiaso.net
+        text: Xe Iaso
+  - name: Photography
+    links:
+      - url: http://edelmangallery.com/exhibitions-and-projects/exhibition-pages/2014/sandro-miller-malkovich,-malkovich,-malkovich-homage-to-photographic-masters.html
+        text: Malkovich, Malkovich, Malkovich
+      - url: https://www.flickr.com/photos/projectapolloarchive/albums/
+        text: Project Apollo Archive
+      - url: http://www.jennifergreenburg.com/revisinghistory/
+        text: Jennifer Greenburg
+      - url: https://www.instagram.com/miserable_men/
+        text: Men that went shopping
+      - url: http://photography-mapped.com/index.html
+        text: Photography mapped
+      - url: https://www.theuncomfortable.com
+        text: The Uncomfortable
+      - url: https://www.instagram.com/thisbrutalhouse/
+        text: This Brutal House
+  - name: Programming languages
+    links:
+      - url: https://p5js.org
+        text: p5.js
+      - url: https://lean-lang.org
+        text: Lean
+      - url: https://liascript.github.io
+        text: LiaScript
+      - url: https://futhark-lang.org
+        text: Futhark
+      - url: http://julialang.org
+        text: Julia
+      - url: https://pine.fm/LearnToProgram/
+        text: A place to start for the future ruby programmer
+      - url: https://dart.dev
+        text: Dart
+      - url: http://norvig.com/21-days.html
+        text: Teach Yourself Programming in Ten Years
+      - url: http://codekata.com
+        text: CodeKata
+      - url: https://learnxinyminutes.com
+        text: Learn X in Y minutes
+      - url: http://dangermouse.net/esoteric/
+        text: DM's Esoteric Programming Languages
+      - url: http://hyperpolyglot.org
+        text: Hyperpolyglot
+      - url: http://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+        text: C++ Core Guidelines
+      - url: https://www.uiua.org
+        text: Uiua
+  - name: Numerical precision
+    links:
+      - url: https://floating-point-gui.de
+        text: The floating point guide
+      - url: https://ciechanow.ski/exposing-floating-point/
+        text: Exposing Floating Point
+      - url: https://float.exposed
+        text: Float exposed
+  - name: Puzzles
+    links:
+      - url: https://adventofcode.com
+        text: Advent of Code
+      - url: https://cses.fi/problemset/
+        text: CSES Problem Set
+      - url: https://www.mathpuzzle.com
+        text: mathpuzzle
+  - name: Python
+    links:
+      - url: https://www.pyopensci.org/
+        text: pyOpenSci
+      - url: https://learn.scientific-python.org/development/
+        text: Scientific Python Library Development Guide
+      - url: https://docs.python-guide.org
+        text: The Hitchhiker's Guide to Python
+      - url: https://www.youtube.com/watch?v=OSGv2VnC0go
+        text: Transforming Code into Beautiful, Idiomatic Python
+      - url: https://benkurtovic.com/2014/06/01/obfuscating-hello-world.html
+        text: Obfuscating Hello World in Python
+      - url: http://pythonmentors.com
+        text: Python Mentors - Python Core Mentorship
+      - url: http://hplgit.github.io/prog4comp/doc/pub/p4c_Python.pdf
+        text: Programming for Computations - A Gentle Introduction to Numerical Simulations with Python
+      - url: http://engineeringblog.yelp.com/2015/02/assert_called_once-threat-or-menace.html
+        text: 'assert_called_once: Threat or Menace'
+      - url: https://medium.com/technology-invention-and-more/how-to-build-a-simple-neural-network-in-9-lines-of-python-code-cc8f23647ca1
+        text: How to build a simple neural network in 9 lines of Python code
+      - url: http://lignos.org/py_antipatterns/
+        text: Anti-Patterns in Python Programming
+      - url: https://vickiboykis.com/2017/09/26/alice-in-python-projectland/
+        text: Alice in Python projectland
+      - url: https://caremad.io/posts/2016/05/powering-pypi/
+        text: Powering the Python Package Index
+      - url: https://pyformat.info
+        text: String formatting in Python
+      - url: https://developers.google.com/edu/python/
+        text: Google's Python Class
+      - url: http://www.southampton.ac.uk/~fangohr/training/python/pdfs/Python-for-Computational-Science-and-Engineering.pdf
+        text: Python for Computational Science and Engineering
+      - url: https://nedbatchelder.com/text/names.html
+        text: Facts and myths about Python names and values
+      - url: https://libraries.io/pypi/Flask/3.0.2/tree
+        text: Dependency tree for a Python package
+      - url: https://geo-python-site.readthedocs.io/
+        text: Geo-Python 2024
+      - url: https://autogis-site.readthedocs.io/
+        text: Automating GIS Processes 2024
+      - url: https://www.nltk.org/book/
+        text: Natural Language Processing with Python
+  - name: Regular expressions
+    links:
+      - url: https://regexcrossword.com
+        text: Regex Crossword
+      - url: https://regex101.com
+        text: Regular expressions 101
+      - url: https://regex-generator.olafneumann.org
+        text: Regex Generator
+  - name: Research software
+    links:
+      - url: https://www.economist.com/science-and-technology/2016/03/23/of-more-than-academic-interest
+        text: Of more than academic interest
+      - url: https://swcarpentry.github.io/good-enough-practices-in-scientific-computing/
+        text: Good Enough Practices for Scientific Computing
+      - url: https://esipfed.github.io/Software-Assessment-Guidelines/
+        text: ESIP Software Guidelines
+      - url: https://adore.software/
+        text: Amsterdam Declaration on Funding Research Software Sustainability
+      - url: https://coding-confessions.github.io
+        text: Coding Confessions
+      - url: https://findata.fi/en/services-and-instructions/producing-anonymous-results/
+        text: Producing anonymous results
+  - name: Rust
+    links:
+      - url: https://scientificcomputing.rs
+        text: Scientific Computing in Rust
+      - url: https://rust-edu.zulip.cs.pdx.edu
+        text: rust-edu Zulip
+      - url: https://without.boats/blog/the-registers-of-rust/
+        text: The registers of Rust
+      - url: https://google.github.io/comprehensive-rust/
+        text: Free Rust course developed by the Android team at Google
+  - name: Security
+    links:
+      - url: http://www.genaud.net/2013/11/password-cracking/password-cracking-v0.html
+        text: Brute force password cracking
+      - url: https://research.swtch.com/deps
+        text: Our Software Dependency Problem
+  - name: Typography
+    links:
+      - url: https://practicaltypography.com
+        text: Practical Typography
+      - url: https://typesetinthefuture.com
+        text: Typeset In The Future
+      - url: https://www.programmingfonts.org
+        text: Programming Fonts
+  - name: Unsorted
+    links:
+      - url: https://interactionmagic.com/UX-LEGO-Interfaces
+        text: The UX of LEGO Interface Panels
+      - url: https://oeis.org
+        text: The On-Line Encyclopedia of Integer Sequences
+      - url: https://www.black-holes.org
+        text: Simulating extreme spacetimes
+      - url: https://voyant-tools.org
+        text: Voyant Tools is a web-based reading and analysis environment for digital texts
+      - url: https://www.wisecrack.co/8-bit-philosophy
+        text: 8-Bit Philosophy
+      - url: http://www.mcsweeneys.net/articles/kafkas-joke-book
+        text: Kafka's joke book
+      - url: http://www.catb.org/esr/faqs/smart-questions.html
+        text: How To Ask Questions The Smart Way
+      - url: https://praeclarum.org/2022/02/19/hard-problems.html
+        text: Practical Guide to Solving Hard Problems
+      - url: https://www.documentcloud.org/documents/69746-hart-smith-on-outsourcing
+        text: Hart Smith on Outsourcing
+      - url: http://www.space-invaders.com
+        text: Invader
+      - url: http://www.theverge.com/2015/10/25/9457247/the-simpsons-al-jean-interview
+        text: How an episode of The Simpsons is made
+      - url: http://hintjens.com/blog:100
+        text: 'Amdahl to Zipf: Ten Laws of the Physics of People'
+      - url: https://media.pragprog.com/articles/mar_02_archeology.pdf
+        text: Software Archaeology
+      - url: http://moralmachine.mit.edu
+        text: The Moral Machine
+      - url: https://nakamotoinstitute.org/shelling-out/
+        text: 'Shelling Out: The Origins of Money'
+  - name: Versioning
+    links:
+      - url: http://semver.org
+        text: Semantic Versioning
+      - url: http://faq.sealedabstract.com/why_not_semver/
+        text: Why not semver
+      - url: https://gist.github.com/jashkenas/cbd2b088e20279ae2c8e
+        text: Why Semantic Versioning Isn't
+      - url: http://blog.hypesystem.dk/on-versioning
+        text: On Versioning
+      - url: http://keepachangelog.com
+        text: Keep a changelog
+  - name: Visualization
+    links:
+      - url: https://earth.nullschool.net
+        text: 'Earth: a global map of wind, weather, and ocean conditions'
+      - url: https://www.data-to-viz.com
+        text: From Data to Viz
+      - url: https://python-graph-gallery.com
+        text: The Python Graph Gallery
+      - url: https://r-graph-gallery.com
+        text: The R Graph Gallery
+  - name: Web development
+    links:
+      - url: http://www.mintemail.com
+        text: Disposable emails
+      - url: http://fabianburghardt.de/webolution/
+        text: Evolution of Webdesign
+      - url: https://marksheet.io
+        text: HTML and CSS tutorial

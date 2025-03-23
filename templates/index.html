@@ -1,0 +1,39 @@
+{% import "macros.html" as macros %}
+
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="uk-child-width-expand@s" uk-grid>
+    <div class="uk-width-1-2@m">
+      <h2>Radovan Bast</h2>
+
+      <hr>
+
+      {% set about = get_page(path="index/about.md") %}
+      {{ about.content | safe }}
+
+      {% set img = resize_image(path="img/radovan-bast.jpg", width=180, op="fit_width") %}
+      <img src="{{ img.url }}" alt="Radovan Bast" />
+    </div>
+
+    <div class="uk-width-1-2@m">
+      <h2>Projects</h2>
+
+      <hr>
+
+      {% set data = load_data(path="content/projects/data.yml") %}
+      {{ macros::projects(data=data.active, count=8) }}
+
+      <div class="uk-card uk-card-default uk-card-small uk-card-body uk-margin-large-top">
+        <a href="/projects/">More projects ...</a>
+      </div>
+
+      <hr>
+
+      <p>
+        Small things I learned recently:
+        <a target="_blank" href="https://github.com/bast/til">https://github.com/bast/til</a>
+      </p>
+    </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {% set data = load_data(path="content/bookmarks.yml") %}
+
+  {% set counter = 1 %}
+  {% for section in data.sections %}
+    {% for link in section.links %}
+      {% set_global counter = counter + 1 %}
+    {% endfor %}
+  {% endfor %}
+
+  <h1>Bookmarks</h1>
+  <hr>
+
+  <p>
+    Here I collect some useful resources so that I don't need to have
+    {{ counter }}
+    browser tabs open.
+  </p>
+
+  <div class="uk-child-width-expand@m" uk-grid>
+    <div class="uk-width-1-4@m uk-visible@m">
+      <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky">
+        {% for section in data.sections %}
+          <a href="#{{ section.name | replace(from=" ", to="-") }}">{{ section.name }}</a><br>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="uk-width-3-4@m">
+      <div class="uk-column-1-2@m uk-margin-large-top">
+        {% for section in data.sections %}
+          <div class="no-break uk-margin-large-bottom" id="{{ section.name | replace(from=" ", to="-") }}">
+            <h2>{{ section.name }}</h2>
+            {% for link in section.links %}
+              <div>
+                <a href="{{ link.url }}" target="_blank">{{ link.text }}</a>
+              </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}

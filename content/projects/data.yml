@@ -1,0 +1,224 @@
+active:
+  - name: CodeRefinery
+    url: https://coderefinery.org/
+    image: coderefinery.png
+    text: |
+      We teach all the essential tools which are usually skipped in academic
+      education so everyone can make full use of software, computing, and data
+      with focus on reusability, reproducibility, and openness.
+  - name: Research software engineering group at UiT
+    url: https://research-software.uit.no
+    image: rse-uit.png
+    text: |
+      We want to help all researchers and students at UiT to develop and
+      improve their research software. This can span from simple R or Python
+      scripts to complex GPU enabled software packages.
+  - name: Nordic research software engineers
+    url: https://nordic-rse.org/
+    image: nordic-rse-map.png
+    text: |
+      Co-building the community of Nordic research software engineers,
+      and networking with fantastic people.
+  - name: Sonar
+    url: https://github.com/NordicHPC/sonar
+    image: sonar-small.png
+    text: |
+      Tool to profile usage of HPC resources by regularly probing processes.
+  - name: TMS location
+    url: https://github.com/bast/tms-location
+    image: tms-screenshot.png
+    text: |
+      Code to visualize and locate points for trans-cranial magnetic stimulation (TMS).
+  - name: numgrid
+    url: https://github.com/dftlibs/numgrid
+    image: dftlibs-logo.png
+    text: |
+      Numgrid is a library that produces numerical integration grid for
+      molecules based on atom coordinates, atom types, and basis set
+      information. This library provides Rust and Python bindings.
+  - name: Polygons
+    url: https://github.com/bast/polygons
+    image: polygons.png
+    text: |
+      Fast points-in-polygon test and distances to polygons.
+  - name: Tromsø paragliding
+    url: https://tromso-paragliding.xyz
+    image: tromso-paragliding.png
+    text: |
+      Info about Tromso paragliding weather/areas for new/visiting pilots.
+  - name: History-window
+    url: https://github.com/bast/history-window
+    text: |
+      Show command history "picture-in-picture" when teaching command line.
+  - name: TMS location
+    url: https://github.com/bast/tms-location
+    text: |
+      Code to visualize and locate points for trans-cranial magnetic stimulation (TMS).
+  - name: Cicero
+    url: https://cicero.xyz
+    text: |
+      Serving presentation slides written in Markdown.
+      You can host your talk on GitHub or GitLab. Cicero will render it
+      using remark of reveal.js on the fly.
+      You can style your slides to your heart's content using CSS.
+      No more "Can you please email me the slides after the workshop?".
+      Talks become lightweight, reusable, versionable, branchable, and forkable.
+      Code is on [GitHub](https://github.com/bast/cicero).
+      Documentation is on [Read the Docs](https://cicero.readthedocs.io/).
+  - name: Flanders
+    url: https://github.com/bast/flanders
+    image: flanders.png
+    text: |
+      Fast 2D nearest neighbor search with an angle.
+  - name: Coastal express
+    url: https://github.com/bast/coastal-express
+    text: |
+      Compute nearest neighbor distances along the coast with a view angle.
+  - name: THREAT DEFUSER
+    url: https://threat-defuser.org/
+    image: threat-defuser.png
+    text: |
+      THREAT-DEFUSER explores the role of "soft" information strategies propagated
+      through mass and social media that constitute hybrid warfare. We investigate
+      Norwegian perceptions of Russia, as well as Russian perceptions of Norway, in
+      the context of Norwegian national security.
+  - name: SMARTool
+    url: https://github.com/smartool/smartool-rus-eng
+    image: smartool.png
+    text: |
+      The Strategic Mastery of Russian Tool.
+  - name: runtest
+    url: http://runtest.readthedocs.io
+    image: https://raw.githubusercontent.com/bast/runtest/master/img/runtest-small.png
+    text: |
+      Numerically tolerant end-to-end test library for scientific codes.
+      The aim of this library is to make the testing and maintenance of tests easy.
+      The library allows to extract portions of the program output(s) which are
+      automatically compared to reference outputs with a relative or absolute
+      numerical tolerance to compensate for numerical noise due to machine precision.
+  - name: Gitink
+    url: https://github.com/bast/gitink/
+    image: gitink.jpg
+    text: |
+      ASCII to SVG Git log graph visualizer. Useful for teaching Git.
+
+standby:
+  - name: Research Software Hour
+    url: https://researchsoftwarehour.github.io/
+    image: rsh.png
+    text: |
+      Research Software Hour is an online stream/show about scientific computing and
+      research software. It is designed to provide the skills typically picked up via
+      informal networks: each episode is some combination of exploring new tools,
+      analyzing and improving someone’s research code, and discussion.
+    role: Co-creator
+  - name: DIRAC
+    url: http://www.diracprogram.org
+    image: dirac.png
+    text: |
+      Program for Atomic and Molecular Direct Iterative Relativistic All-electron
+      Calculations.
+    role: |
+      Co-author, CMake infrastructure, migration to Git and GitLab, code maintenance and plumbing,
+      exchange-correlation integrator, visualization module, higher order response
+      properties.
+  - name: CMake Cookbook
+    url: https://www.packtpub.com/application-development/cmake-cookbook
+    image: cmake-cookbook-cover.png
+    text: |
+      Learn CMake through a series of task-based recipes that provide you with
+      practical, simple, and ready-to-use CMake solutions for your code.
+      The sources for the CMake Cookbook recipes are on
+      [GitHub](https://github.com/dev-cafe/cmake-cookbook).
+    role: Co-author
+  - name: Dalton and LSDalton
+    url: https://www.daltonprogram.org
+    image: dalton.jpg
+    text: |
+      Together, the two programs provide an extensive
+      functionality for the calculations of molecular properties at the HF, DFT,
+      MCSCF, and CC levels of theory.
+    role: |
+      CMake infrastructure, website, open-sourcing, migration to GitLab,
+      OpenRSP integration, magnetically-induced currents at the MCSCF level.
+  - name: OpenRSP
+    url: https://openrsp.org
+    image: https://raw.githubusercontent.com/openrsp/logo/master/logo.png
+    text: |
+      Program for the open-ended calculation of response properties. It
+      connects to response equation solution routines, routines for differentiated
+      one-electron and two-electron integral contributions, and routines for
+      exchange/correlation contributions to enable the calculation of response
+      properties to arbitrary order.
+    role: |
+      CMake infrastructure, website, open-sourcing, exchange-correlation
+      contributions.
+  - name: SYMBIOSES
+    url: http://barentssea.symbioses.no
+    text: |
+      The objective of the SYMBIOSES project is to create an ecosystem based impact
+      assessment and management tool providing fact-based, quantitative analyses of
+      the potential consequences of petroleum developments and other activities in
+      spatially managed ecosystems, mainly focusing on the Lofoten-Vesterålen area.
+    role: |
+      Code maintenance, code optimization, computations, web app. I was part
+      of this project for two years.
+  - name: XCint
+    url: https://github.com/dftlibs/xcint
+    image: dftlibs-logo.png
+    text: |
+      XCint integrates the exchange-correlation (XC) energy ExcExc and the elements
+      of the XC potential matrix VxcVxc, as well as their derivatives with respect to
+      electric field and/or geometric perturbations. The integration is performed on
+      a standard numerical grid.
+      Code is on [GitHub](https://github.com/dftlibs/xcint).
+      Documentation is on [Read the Docs](https://xcint.readthedocs.io/).
+  - name: XCFun
+    url: https://github.com/dftlibs/xcfun
+    image: dftlibs-logo.png
+    text: |
+      XCFun is a library of exchange-correlation (XC) functionals to be used in
+      density-functional theory (DFT) codes. XCFun follows a unique implementation
+      strategy which enables the computation of derivatives of the XC functional
+      kernel up to arbitrary order. It does so by relying on forward-mode automatic
+      differentiation.
+      Code is on [GitHub](https://github.com/dftlibs/xcfun).
+      Documentation is on [Read the Docs](https://xcfun.readthedocs.io/).
+    role: Code maintenance, testing.
+  - name: xcauto
+    url: https://github.com/dftlibs/xcauto
+    image: xcauto.png
+    text: |
+      This library computes arbitrary-order exchange-correlation function(al)
+      derivatives using
+      [JAX](https://jax.readthedocs.io/).
+      The emphasis of this project is on ease of use and ease of adding functionals
+      in Python. The focus is not (yet) on performance. Our hope is that this project
+      can make it easier to test new implementations of functional derivatives but
+      maybe also used directly to provide functional derivatives in a density
+      functional theory program.
+    role: Co-author, initial implementation.
+  - name: GIMIC
+    url: https://github.com/qmcurrents/gimic
+    image: gimic.jpg
+    text: |
+      The GIMIC program calculates magnetically induced currents in molecules. You
+      need to provide this program with a density matrix in atomic-orbital (AO) basis
+      and three (effective) magnetically perturbed AO density matrices in the proper
+      format.
+      Code is on [GitHub](https://github.com/qmcurrents/gimic).
+      Documentation is on [Read the Docs](https://gimic.readthedocs.io/).
+    role: Code maintenance, CMake infrastructure, testing, code optimization.
+  - name: parselglossy
+    url: https://github.com/dev-cafe/parselglossy
+    image: parse.jpg
+    text: |
+      Generic input parsing library, speaking in tongues.
+      Code is on [GitHub](https://github.com/dev-cafe/parselglossy).
+      Documentation is on [Read the Docs](https://parselglossy.readthedocs.io/).
+    role: Co-author
+  - name: Go game
+    url: https://github.com/bast/go-game
+    image: go.png
+    text: |
+      Go game for the browser, implemented using [Vue.js](https://vuejs.org/).

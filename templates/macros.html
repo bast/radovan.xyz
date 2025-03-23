@@ -1,0 +1,89 @@
+{% macro toc(page) %}
+  {% if page.toc %}
+    <ul>
+      {% for h1 in page.toc %}
+        <li>
+          <a href="{{ h1.permalink | safe }}">{{ h1.title }}</a>
+          {% if h1.children %}
+            <ul>
+              {% for h2 in h1.children %}
+                <li>
+                  <a href="{{ h2.permalink | safe }}">{{ h2.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro toc %}
+
+{% macro projects(data, count) %}
+  {% for project in data %}
+    {% if loop.index <= count %}
+      <div class="uk-margin-bottom">
+        <div class="uk-child-width-expand@s" uk-grid>
+          <div class="uk-width-1-5@s">
+            {% if project.image %}
+              <a target="_blank" href="{{ project.url | safe }}">
+                {% if 'http' in project.image %}
+                  <img src="{{ project.image | safe }}"
+                       alt="{{ project.name }} project icon"
+                       width="100">
+                {% else %}
+                  {% set img = resize_image(path="projects/" ~ project.image, width=100, op="fit_width") %}
+                  <img src="{{ img.url }}"
+                       alt="{{ project.name }} project icon">
+                {% endif %}
+              </a>
+            {% else %}
+              <!-- <img src="/images/wireframe/image.png"> -->
+            {% endif %}
+          </div>
+
+          <div class="uk-width-4-5@s">
+            <div class="content">
+              <h2 style="margin-bottom: -15px;">
+                <a target="_blank" href="{{ project.url | safe }}">{{ project.name }}</a>
+              </h2>
+              <p>
+                {{ project.text | markdown | safe }}
+              </p>
+              {% if project.role %}
+                <div class="uk-text-muted" style="margin-top: -15px;">
+                  My role: {{ project.role }}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+{% endmacro toc %}
+
+{% macro list(data, heading) %}
+  <table class="uk-table uk-table-small uk-table-justify">
+    <tr>
+      <td></td>
+      <td>
+        <h2>{{ heading }}</h2>
+      </td>
+    </tr>
+    {% for item in data %}
+      <tr>
+        <td class="uk-width-1-5 uk-text-muted">
+          {% if item.start %}
+            {{ item.start }} &mdash; {{ item.end }}
+          {% else %}
+            {{ item.year }}
+          {% endif %}
+        </td>
+        <td>
+          {{ item.text | markdown | safe }}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endmacro list %}

@@ -1,0 +1,13 @@
+navigation:
+  - name: Home
+    target: /
+  - name: Projects
+    target: /projects/
+  - name: CV
+    target: /cv/
+  - name: Publications
+    target: /publications/
+# - name: Blog
+#   target: /blog/
+  - name: Bookmarks
+    target: /bookmarks/
