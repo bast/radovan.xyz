@@ -7,7 +7,7 @@ navigation:
     target: /cv/
   - name: Publications
     target: /publications/
-# - name: Blog
-#   target: /blog/
+  - name: Blog
+    target: /blog/
   - name: Bookmarks
     target: /bookmarks/
