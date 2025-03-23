@@ -267,6 +267,10 @@ sections:
     links:
       - url: https://en.wikipedia.org/wiki/Nurse_with_Wound_list
         text: Nurse with Wound list
+  - name: Nix/NixOS
+    links:
+      - url: https://nixos-and-flakes.thiscute.world/introduction/
+        text: NixOS and Flakes Book
   - name: Open science
     links:
       - url: https://opensource.com/business/10/8/barriers-open-science-big-business-watson-and-crick
