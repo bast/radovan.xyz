@@ -22,7 +22,7 @@ Biology group in Stockholm.
 
 [Email](mailto:firstname@radovan.xyz)
 |
-[Bluesky](https://bsky.app/profile/radovan.bsky.social)
+[Bluesky](https://bsky.app/profile/radovan.xyz)
 |
 <a rel="me" href="https://fosstodon.org/@radovan">Mastodon</a>
 |
