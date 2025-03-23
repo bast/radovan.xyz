@@ -298,7 +298,11 @@ on the Rust side, and then query and modify them from Fortran. And I want to be
 able to have more than one instance of these data structures.
 
 {% margin_note_left() %}
-HashMaps is one of those data structures that I miss most in Fortran.
+HashMap is one of those data structures that I miss most in Fortran.
+{% end %}
+
+{% margin_note_right() %}
+In the Rust code example I was lazy writing the actual safety notices.
 {% end %}
 
 The example data structure will be a HashMap but we can imagine something more
