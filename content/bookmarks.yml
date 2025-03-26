@@ -519,6 +519,8 @@ sections:
         text: The Python Graph Gallery
       - url: https://r-graph-gallery.com
         text: The R Graph Gallery
+      - url: https://flowingdata.com/projects/dishonest-charts/
+        text: Defense Against Dishonest Charts
   - name: Web development
     links:
       - url: http://www.mintemail.com
