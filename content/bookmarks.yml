@@ -521,6 +521,8 @@ sections:
         text: The R Graph Gallery
       - url: https://flowingdata.com/projects/dishonest-charts/
         text: Defense Against Dishonest Charts
+      - url: https://github.com/cxli233/FriendsDontLetFriends
+        text: Friends Don't Let Friends Make Bad Graphs
   - name: Web development
     links:
       - url: http://www.mintemail.com
