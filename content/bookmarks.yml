@@ -523,6 +523,8 @@ sections:
         text: Defense Against Dishonest Charts
       - url: https://github.com/cxli233/FriendsDontLetFriends
         text: Friends Don't Let Friends Make Bad Graphs
+      - url: https://www.fabiocrameri.ch/colourmaps/
+        text: Scientific colour maps
   - name: Web development
     links:
       - url: http://www.mintemail.com
