@@ -271,6 +271,8 @@ sections:
     links:
       - url: https://nixos-and-flakes.thiscute.world/introduction/
         text: NixOS and Flakes Book
+      - url: https://noogle.dev/
+        text: Noogle
   - name: Open science
     links:
       - url: https://opensource.com/business/10/8/barriers-open-science-big-business-watson-and-crick
