@@ -317,6 +317,8 @@ sections:
         text: Julia Evans
       - url: https://xeiaso.net
         text: Xe Iaso
+      - url: https://orlp.net/
+        text: Orson R. L. Peters
   - name: Photography
     links:
       - url: http://edelmangallery.com/exhibitions-and-projects/exhibition-pages/2014/sandro-miller-malkovich,-malkovich,-malkovich-homage-to-photographic-masters.html
