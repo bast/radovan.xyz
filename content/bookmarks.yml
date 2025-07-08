@@ -363,6 +363,10 @@ sections:
         text: C++ Core Guidelines
       - url: https://www.uiua.org
         text: Uiua
+      - url: https://danielbachler.de/2020/12/23/what-i-wish-i-knew-when-learning-fsharp.html
+        text: What I wish I knew when learning F#
+      - url: https://www.bartoszsypytkowski.com/writing-high-performance-f-code/
+        text: Writing high performance F# code
   - name: Numerical precision
     links:
       - url: https://floating-point-gui.de
