@@ -335,6 +335,18 @@ sections:
         text: The Uncomfortable
       - url: https://www.instagram.com/thisbrutalhouse/
         text: This Brutal House
+  - name: Maps
+    links:
+      - url: https://norgeskart.no/
+        text: Norgeskart
+      - url: https://www.windy.com/
+        text: Windy
+      - url: https://skyvector.com/
+        text: SkyVector Aeronautical Charts
+      - url: https://livingatlas.arcgis.com/wayback/
+        text: Esri World Imagery Wayback App
+      - url: https://flattkart.no/
+        text: Ticks in Norway
   - name: Programming languages
     links:
       - url: https://p5js.org
