@@ -379,6 +379,8 @@ sections:
         text: Uiua
       - url: https://danielbachler.de/2020/12/23/what-i-wish-i-knew-when-learning-fsharp.html
         text: What I wish I knew when learning F#
+      - url: https://learn.microsoft.com/en-us/dotnet/fsharp/style-guide/conventions
+        text: F# coding conventions (by Microsoft)
       - url: https://www.bartoszsypytkowski.com/writing-high-performance-f-code/
         text: Writing high performance F# code
   - name: Numerical precision
