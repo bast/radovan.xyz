@@ -383,6 +383,8 @@ sections:
         text: F# coding conventions (by Microsoft)
       - url: https://www.bartoszsypytkowski.com/writing-high-performance-f-code/
         text: Writing high performance F# code
+      - url: https://shirakumo.github.io/trial/
+        text: The Trial Game Engine (written in Common Lisp)
   - name: Numerical precision
     links:
       - url: https://floating-point-gui.de
@@ -519,6 +521,8 @@ sections:
         text: The Moral Machine
       - url: https://nakamotoinstitute.org/shelling-out/
         text: 'Shelling Out: The Origins of Money'
+      - url: https://www.imperial.ac.uk/space-and-atmospheric-physics/research/missions-and-projects/space-missions/solar-orbiter/updates/
+        text: Latest Solar Orbiter Magnetic Field Data
   - name: Versioning
     links:
       - url: http://semver.org
