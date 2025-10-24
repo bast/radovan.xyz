@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://radovan.xyz/</loc>
+    </url>
+    <url>
+        <loc>https://radovan.xyz/blog/</loc>
+    </url>
+    <url>
+        <loc>https://radovan.xyz/blog/fortran-calling-rust/</loc>
+        <lastmod>2025-03-23</lastmod>
+    </url>
+    <url>
+        <loc>https://radovan.xyz/bookmarks/</loc>
+    </url>
+    <url>
+        <loc>https://radovan.xyz/cv/</loc>
+    </url>
+    <url>
+        <loc>https://radovan.xyz/index/</loc>
+    </url>
+    <url>
+        <loc>https://radovan.xyz/index/about/</loc>
+    </url>
+    <url>
+        <loc>https://radovan.xyz/projects/</loc>
+    </url>
+    <url>
+        <loc>https://radovan.xyz/publications/</loc>
+    </url>
+</urlset>
