@@ -385,6 +385,8 @@ sections:
         text: Writing high performance F# code
       - url: https://shirakumo.github.io/trial/
         text: The Trial Game Engine (written in Common Lisp)
+      - url: https://a3s.fi/high-performance-r/index.html
+        text: High Performance R
   - name: Numerical precision
     links:
       - url: https://floating-point-gui.de
