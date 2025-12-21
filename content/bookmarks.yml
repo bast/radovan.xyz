@@ -477,6 +477,10 @@ sections:
         text: The registers of Rust
       - url: https://google.github.io/comprehensive-rust/
         text: Free Rust course developed by the Android team at Google
+      - url: https://rust-unofficial.github.io/patterns/
+        text: Rust Design Patterns
+      - url: https://nnethercote.github.io/perf-book/
+        text: The Rust Performance Book
   - name: Security
     links:
       - url: http://www.genaud.net/2013/11/password-cracking/password-cracking-v0.html
