@@ -319,6 +319,8 @@ sections:
         text: Xe Iaso
       - url: https://orlp.net/
         text: Orson R. L. Peters
+      - url: https://addyosmani.com/blog/21-lessons/
+        text: 21 Lessons From 14 Years at Google
   - name: Photography
     links:
       - url: http://edelmangallery.com/exhibitions-and-projects/exhibition-pages/2014/sandro-miller-malkovich,-malkovich,-malkovich-homage-to-photographic-masters.html
@@ -347,6 +349,8 @@ sections:
         text: Esri World Imagery Wayback App
       - url: https://flattkart.no/
         text: Ticks in Norway
+      - url: https://neacsu.net/geodesy/snyder/
+        text: Map Projections - A Working Manual (John P. Snyder)
   - name: Programming languages
     links:
       - url: https://p5js.org
