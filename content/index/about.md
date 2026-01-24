@@ -20,7 +20,7 @@ at the Laboratoire de Chimie et Physique Quantiques in
 Toulouse, and [PDC](https://www.pdc.kth.se) and the Theoretical Chemistry and
 Biology group in Stockholm.
 
-[Email](mailto:firstname@radovan.xyz)
+[Email](mailto:*firstname@radovan.xyz)
 |
 [Bluesky](https://bsky.app/profile/radovan.xyz)
 |
