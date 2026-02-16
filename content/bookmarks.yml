@@ -321,6 +321,8 @@ sections:
         text: Orson R. L. Peters
       - url: https://addyosmani.com/blog/21-lessons/
         text: 21 Lessons From 14 Years at Google
+      - url: https://blog.frost.kiwi/
+        text: FrostKiwi's Secrets
   - name: Photography
     links:
       - url: http://edelmangallery.com/exhibitions-and-projects/exhibition-pages/2014/sandro-miller-malkovich,-malkovich,-malkovich-homage-to-photographic-masters.html
@@ -563,6 +565,10 @@ sections:
         text: Friends Don't Let Friends Make Bad Graphs
       - url: https://www.fabiocrameri.ch/colourmaps/
         text: Scientific colour maps
+  - name: Weather
+    links:
+      - url: https://www.wetter3.de/archiv_ukmet_dt.html
+        text: Archive of weather charts
   - name: Web development
     links:
       - url: http://www.mintemail.com
