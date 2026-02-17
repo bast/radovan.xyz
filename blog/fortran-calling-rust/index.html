@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link rel="shortcut icon" href="https://radovan.xyz/img/favicon.ico">
+
+    
+      <title>Fortran calling Rust</title>
+      <meta property="og:title" content="Fortran calling Rust" />
+    
+
+    
+      <meta property="og:description" content="A tour of interfacing Fortran with Rust through a C interface" />
+    
+
+    
+  
+    
+    <meta property="og:image" content="https://radovan.xyz/processed_images/typewriter.941a7d0101ba0c77.png" />
+  
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.25.5/dist/css/uikit.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.25.5/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.25.5/dist/js/uikit-icons.min.js"></script>
+
+    <link href="https://radovan.xyz/style.css" rel="stylesheet">
+    <link href="https://radovan.xyz/fonts.css" rel="stylesheet">
+    <link href="https://radovan.xyz/marginalia.css" rel="stylesheet">
+    <link href="https://radovan.xyz/code-blocks.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="uk-container uk-margin-large-bottom">
+
+      <div class="uk-margin-bottom">
+        
+
+<nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
+  <ul class="uk-navbar-nav uk-visible@s">
+    
+      
+        <li><a href="https://radovan.xyz">Home</a></li>
+      
+    
+      
+        <li><a href="https://radovan.xyz/projects">Projects</a></li>
+      
+    
+      
+        <li><a href="https://radovan.xyz/cv">CV</a></li>
+      
+    
+      
+        <li><a href="https://radovan.xyz/publications">Publications</a></li>
+      
+    
+      
+        <li><a href="https://radovan.xyz/blog">Blog</a></li>
+      
+    
+      
+        <li><a href="https://radovan.xyz/bookmarks">Bookmarks</a></li>
+      
+    
+  </ul>
+  <a href="#" class="uk-navbar-toggle uk-hidden@s" uk-navbar-toggle-icon uk-toggle="target: #sidenav"></a>
+</nav>
+
+<div id="sidenav" uk-offcanvas>
+  <div class="uk-offcanvas-bar">
+    <ul class="uk-nav uk-nav-default">
+      
+        
+          <li><a href="https://radovan.xyz">Home</a></li>
+        
+      
+        
+          <li><a href="https://radovan.xyz/projects">Projects</a></li>
+        
+      
+        
+          <li><a href="https://radovan.xyz/cv">CV</a></li>
+        
+      
+        
+          <li><a href="https://radovan.xyz/publications">Publications</a></li>
+        
+      
+        
+          <li><a href="https://radovan.xyz/blog">Blog</a></li>
+        
+      
+        
+          <li><a href="https://radovan.xyz/bookmarks">Bookmarks</a></li>
+        
+      
+    </ul>
+  </div>
+</div>
+
+      </div>
+
+      <div class="markdown">
+        
+<div class="uk-container uk-container-xsmall">
+  <article class="uk-article">
+
+    <h1 class="uk-article-title"><a class="uk-link-reset" href="">Fortran calling Rust</a></h1>
+
+    <p class="uk-article-meta">
+      
+        <h2>
+          A tour of interfacing Fortran with Rust through a C interface
+        </h2>
+      
+      March 23, 2025
+      
+    </p>
+
+    <hr>
+
+    
+
+<figure class="uk-thumbnail uk-thumbnail-expand">
+  <img src="https:&#x2F;&#x2F;radovan.xyz&#x2F;processed_images&#x2F;typewriter.3a68cd8595ba5407.png" alt="Screenshot of an early draft which looks like written on typewriter">
+  <figcaption class="uk-text-small fig_caption">
+    <p>Screenshot of an early draft. Maybe writing it on a typewriter would have made
+the blog post shorter.  This image is created using the wonderful
+<a href="https://uniqcode.com/typewriter/">OverType</a>.</p>
+
+  </figcaption>
+</figure>
+
+  
+    <ul>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#why-fortran-and-rust">Why Fortran and Rust?</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#how">How?</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#functions-which-return-a-single-value">Functions which return a single value</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#do-we-need-to-worry-about-the-c-naming-convention">Do we need to worry about the C naming convention?</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#should-we-not-compile-the-rust-library-as-part-of-cmake">Should we not compile the Rust library as part of CMake?</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#working-with-arrays">Working with arrays</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#maintaining-a-context-on-the-rust-side">Maintaining a context on the Rust side</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#example-using-rust-s-hashmap-in-fortran">Example: Using Rust's HashMap in Fortran</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#making-the-hashmap-interface-more-ergonomic">Making the HashMap interface more ergonomic</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#checking-for-memory-leaks">Checking for memory leaks</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#maybe-you-prefer-the-rust-library-in-the-build-dir">Maybe you prefer the Rust library in the build dir?</a>
+          
+        </li>
+      
+        <li>
+          <a href="https://radovan.xyz/blog/fortran-calling-rust/#versions-used-to-test-the-code-examples">Versions used to test the code examples</a>
+          
+        </li>
+      
+    </ul>
+  
+
+<h2 id="why-fortran-and-rust">Why Fortran and Rust?</h2>
+<p>There are many things I like about modern Fortran (e.g. the simplicity, how
+it helps to write modular code, support for pure functions).  What I miss in
+modern Fortran are data structures like a hash table (dictionary) or a
+vector/list (dynamic array) or a set. These are standard in many other
+languages.</p>
+<span class="aside_right">
+  <p>Often I feel there is too much focus on potential speed when comparing
+languages.</p>
+<p>Neither Rust nor Fortran guarantee that your code will be fast.  It is possible
+to write slow or unmaintainable code in any language.</p>
+
+</span>
+<p>What I like about Rust is the tooling, the type safety, the memory safety,
+thread safety, and the ecosystem. Rust code can also be really fast and so can
+Fortran code.</p>
+<p>In one of my projects I needed to add some functionality to a 200k lines
+Fortran code.  The thing I needed was possible but not trivial to do in Fortran
+(I needed something resembling a priority queue).  I did not want to implement
+the basic data structures in Fortran myself or complicate the code by emulating
+them using arrays. I chose to write the new part in Rust and call it from
+Fortran.</p>
+<p>Fortran is very popular in the scientific community (especially in
+computational physics and chemistry, in geosciences, and weather forecasting)
+and it is here to stay for decades to come. I believe that there will be many
+situations where the solution is not to rewrite 1M lines of Fortran code but to
+couple these two fine languages. Below I describe how I approach this.</p>
+<h2 id="how">How?</h2>
+<p>Rust has excellent interoperability with C. Fortran has excellent
+interoperability with C as well (via <code>iso_c_binding</code>). This means that a good
+medium for Fortran to talk to Rust is via a C interface.  We will see that we
+can make the C interface relatively "thin" (perhaps 20 more lines of code to
+write?).</p>
+<h2 id="functions-which-return-a-single-value">Functions which return a single value</h2>
+<p>Let's start with a relatively simple example. On the Rust side I will create
+few functions that can add numbers and return a single value. On the Fortran
+side I will call these functions.</p>
+<span class="aside_right">
+  <p>You might prefer to compile the Rust code into <code>build/</code> instead of
+<code>rust/target/</code>. Further below I will show how that can be done.</p>
+
+</span>
+<p>All examples in this post will use this directory structure:</p>
+<pre data-lang="txt" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-txt "><code class="language-txt" data-lang="txt"><span>.
+</span><span>├── build            &lt;- the build directory
+</span><span>├── CMakeLists.txt
+</span><mark style="background-color:#c7c7bf2e;"><span>├── example.f90      &lt;- the Fortran code
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>├── interface.f90    &lt;- here we explain the interface to Fortran
+</span></mark><span>└── rust
+</span><span>    ├── Cargo.lock
+</span><span>    ├── Cargo.toml
+</span><span>    ├── src
+</span><mark style="background-color:#c7c7bf2e;"><span>    │   └── lib.rs   &lt;- the Rust code
+</span></mark><span>    └── target       &lt;- the default place where Rust compiles to
+</span></code></pre>
+<p>Let's start with the Rust code (<code>rust/src/lib.rs</code>).
+The first two functions sum two numbers. The third function sums the elements
+of an array:</p>
+<pre data-lang="rust" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">sum_two_integers</span><span>(</span><span style="color:#5597d6;">a</span><span>: </span><span style="color:#668f14;">i32</span><span>, </span><span style="color:#5597d6;">b</span><span>: </span><span style="color:#668f14;">i32</span><span>) -&gt; </span><span style="color:#668f14;">i32 </span><span>{
+</span><span>    a </span><span style="color:#72ab00;">+</span><span> b
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">sum_two_doubles</span><span>(</span><span style="color:#5597d6;">a</span><span>: </span><span style="color:#668f14;">f64</span><span>, </span><span style="color:#5597d6;">b</span><span>: </span><span style="color:#668f14;">f64</span><span>) -&gt; </span><span style="color:#668f14;">f64 </span><span>{
+</span><span>    a </span><span style="color:#72ab00;">+</span><span> b
+</span><span>}
+</span><span>
+</span><span style="color:#7f8989;">/// # Safety
+</span><span style="color:#7f8989;">///
+</span><span style="color:#7f8989;">/// Function assumes that the input data is a valid pointer to an array and that the
+</span><span style="color:#7f8989;">/// array size matches the `size` parameter.
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub unsafe </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">sum_integer_array</span><span>(</span><span style="color:#5597d6;">data</span><span>: </span><span style="color:#668f14;">*const i32</span><span>, </span><span style="color:#5597d6;">size</span><span>: </span><span style="color:#668f14;">usize</span><span>) -&gt; </span><span style="color:#668f14;">i32 </span><span>{
+</span><span>    </span><span style="color:#72ab00;">if</span><span> data.</span><span style="color:#b39f04;">is_null</span><span>() {
+</span><span>        </span><span style="color:#72ab00;">return </span><span style="color:#b3933a;">0</span><span>;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#668f14;">let</span><span> slice </span><span style="color:#72ab00;">= </span><span style="color:#668f14;">unsafe </span><span>{ std::slice::from_raw_parts(data, size) };
+</span><span>
+</span><span>    slice.</span><span style="color:#b39f04;">iter</span><span>().</span><span style="color:#b39f04;">sum</span><span>()
+</span><span>}
+</span></code></pre>
+<span class="aside_right">
+  <p>Rust does not need to know about the Fortran side. We ask it to create C-compatible
+interfaces with the <code>pub extern "C"</code> and <code>#[unsafe(no_mangle)]</code> attributes.</p>
+
+</span>
+<p>We should also inspect the <code>Cargo.toml</code> file. The highlighted line is important to
+get a C-compatible dynamic library:</p>
+<pre data-lang="toml" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-toml "><code class="language-toml" data-lang="toml"><span>[</span><span style="color:#6486ab;">package</span><span>]
+</span><span style="color:#7f902a;">name </span><span>= </span><span style="color:#d07711;">&quot;rust&quot;
+</span><span style="color:#7f902a;">version </span><span>= </span><span style="color:#d07711;">&quot;0.1.0&quot;
+</span><span style="color:#7f902a;">edition </span><span>= </span><span style="color:#d07711;">&quot;2024&quot;
+</span><span>
+</span><span>[</span><span style="color:#6486ab;">lib</span><span>]
+</span><mark style="background-color:#c7c7bf2e;"><span style="color:#7f902a;">crate-type </span><span>= [</span><span style="color:#d07711;">&quot;cdylib&quot;</span><span>]
+</span></mark><span>
+</span><span>[</span><span style="color:#6486ab;">dependencies</span><span>]
+</span></code></pre>
+<span class="aside_left">
+  <p>Fortran does not know that it will be calling Rust. It thinks it is talking to
+C.</p>
+<p>I am not sure about the highlighted line. Maybe <code>c_size_t</code> would be more
+correct here but then I would have to use <code>interger(8)</code> on the Fortran side.</p>
+
+</span>
+<p>Now let us look at the Fortran interface file (<code>interface.f90</code>):</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">module </span><span style="color:#c23f31;">rust_interface
+</span><span>
+</span><span>    use, intrinsic </span><span style="color:#72ab00;">::</span><span> iso_c_binding, only: c_int32_t, c_double
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">interface
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">sum_two_integers</span><span>(</span><span style="color:#5597d6;">a</span><span>, </span><span style="color:#5597d6;">b</span><span>) </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">output</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_int32_t
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> a
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> b
+</span><span>            integer(c_int32_t) </span><span style="color:#72ab00;">::</span><span> output
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">sum_two_doubles</span><span>(</span><span style="color:#5597d6;">a</span><span>, </span><span style="color:#5597d6;">b</span><span>) </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">output</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_double
+</span><span>            </span><span style="color:#b39f04;">real</span><span>(c_double), intent(in), value </span><span style="color:#72ab00;">::</span><span> a
+</span><span>            </span><span style="color:#b39f04;">real</span><span>(c_double), intent(in), value </span><span style="color:#72ab00;">::</span><span> b
+</span><span>            </span><span style="color:#b39f04;">real</span><span>(c_double) </span><span style="color:#72ab00;">::</span><span> output
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">sum_integer_array</span><span>(</span><span style="color:#5597d6;">data</span><span>, </span><span style="color:#5597d6;">size</span><span>) </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">output</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_int32_t
+</span><span>            integer(c_int32_t), intent(in) </span><span style="color:#72ab00;">:: </span><span>data(</span><span style="color:#72ab00;">*</span><span>)
+</span><mark style="background-color:#c7c7bf2e;"><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> si</span><span style="color:#b3933a;">ze
+</span></mark><span>            integer(c_int32_t) </span><span style="color:#72ab00;">::</span><span> output
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>    </span><span style="color:#72ab00;">end interface
+</span><span>
+</span><span style="color:#72ab00;">end module
+</span></code></pre>
+<p>Here is <code>example.f90</code> which uses the Rust code via the interface:</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">program </span><span style="color:#c23f31;">example
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">use </span><span style="color:#668f14;">rust_interface
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    integer, allocatable </span><span style="color:#72ab00;">:: </span><span>integer_array_1d(:)
+</span><span>    integer, allocatable </span><span style="color:#72ab00;">:: </span><span>integer_array_2d(:, :)
+</span><span>
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;sum of two integers:&quot;</span><span>, sum_two_integers(</span><span style="color:#b3933a;">2</span><span>, </span><span style="color:#b3933a;">3</span><span>)
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;sum of two doubles:&quot;</span><span>, sum_two_doubles(</span><span style="color:#b3933a;">2.0d0</span><span>, </span><span style="color:#b3933a;">3.0d0</span><span>)
+</span><span>
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">allocate</span><span>(</span><span style="color:#5597d6;">integer_array_1d</span><span>(</span><span style="color:#b3933a;">5</span><span>))
+</span><span>    integer_array_1d </span><span style="color:#72ab00;">= </span><span>[</span><span style="color:#b3933a;">1</span><span>, </span><span style="color:#b3933a;">2</span><span>, </span><span style="color:#b3933a;">3</span><span>, </span><span style="color:#b3933a;">4</span><span>, </span><span style="color:#b3933a;">5</span><span>]
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;sum of 1D array:&quot;</span><span>, </span><span style="color:#da5d42;">&amp;
+</span><span>            sum_integer_array(integer_array_1d, </span><span style="color:#b39f04;">size</span><span>(integer_array_1d))
+</span><span>    </span><span style="color:#b39f04;">deallocate</span><span>(</span><span style="color:#5597d6;">integer_array_1d</span><span>)
+</span><span>
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">allocate</span><span>(</span><span style="color:#5597d6;">integer_array_2d</span><span>(</span><span style="color:#b3933a;">2</span><span>, </span><span style="color:#b3933a;">3</span><span>))
+</span><span>    integer_array_2d </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">1
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;sum of 2D array:&quot;</span><span>, </span><span style="color:#da5d42;">&amp;
+</span><span>            sum_integer_array(integer_array_2d, </span><span style="color:#b39f04;">size</span><span>(integer_array_2d))
+</span><span>    </span><span style="color:#b39f04;">deallocate</span><span>(</span><span style="color:#5597d6;">integer_array_2d</span><span>)
+</span><span>
+</span><span style="color:#72ab00;">end program
+</span></code></pre>
+<p>Finally, the <code>CMakeLists.txt</code> file:</p>
+<pre data-lang="cmake" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-cmake "><code class="language-cmake" data-lang="cmake"><span style="color:#b39f04;">cmake_minimum_required</span><span>(</span><span style="color:#5597d6;">VERSION </span><span>3.10)
+</span><span>
+</span><span style="color:#b39f04;">project</span><span>(</span><span style="color:#d07711;">&quot;example&quot; </span><span style="color:#5597d6;">LANGUAGES </span><span>Fortran)
+</span><span>
+</span><span style="color:#b39f04;">add_executable</span><span>(example </span><span style="color:#d07711;">&quot;example.f90&quot;</span><span>)
+</span><span>
+</span><span style="color:#b39f04;">target_sources</span><span>(
+</span><span>  example
+</span><span>  </span><span style="color:#5597d6;">PRIVATE
+</span><span>    </span><span style="color:#d07711;">&quot;interface.f90&quot;
+</span><span>  )
+</span><span>
+</span><span style="color:#b39f04;">target_link_libraries</span><span>(
+</span><span>  example
+</span><span>  </span><span style="color:#5597d6;">PRIVATE
+</span><span>    </span><span style="color:#d07711;">&quot;${</span><span style="color:#acb3c2;">CMAKE_CURRENT_SOURCE_DIR</span><span style="color:#d07711;">}/rust/target/release/librust.so&quot;
+</span><span>  )
+</span></code></pre>
+<p>I compile the Rust part separately:</p>
+<pre data-lang="bash" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#5597d6;">$</span><span> cd rust
+</span><span style="color:#5597d6;">$</span><span> cargo build</span><span style="color:#5597d6;"> --release
+</span><span style="color:#5597d6;">$</span><span> cd ..
+</span></code></pre>
+<span class="aside_right">
+  <p>Yes, there is a more portable way to configure and build a CMake project but my
+muscle memory is trained to build this way.</p>
+
+</span>
+<p>This is how I compile the Fortran part:</p>
+<pre data-lang="bash" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#5597d6;">$</span><span> mkdir build
+</span><span style="color:#5597d6;">$</span><span> cd build
+</span><span style="color:#5597d6;">$</span><span> cmake ..
+</span><span style="color:#5597d6;">$</span><span> make
+</span></code></pre>
+<p>This is the output I got. Seems to be working:</p>
+<pre data-lang="txt" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-txt "><code class="language-txt" data-lang="txt"><span>sum of two integers:           5
+</span><span>sum of two doubles:   5.0000000000000000
+</span><span>sum of 1D array:          15
+</span><span>sum of 2D array:           6
+</span></code></pre>
+<h2 id="do-we-need-to-worry-about-the-c-naming-convention">Do we need to worry about the C naming convention?</h2>
+<p>We don't have to worry about the C naming convention and <a href="https://en.wikipedia.org/wiki/Name_mangling">name
+mangling</a>.  The <code>extern "C"</code>
+attribute creates a C-compatible interface. The <code>no_mangle</code> attribute tells
+Rust not to mangle (modify) the name of the function and make it findable by
+the linker under this name (<code>sum_integer_array</code>):</p>
+<pre data-lang="rust" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub unsafe </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">sum_integer_array</span><span>(</span><span style="color:#5597d6;">data</span><span>: </span><span style="color:#668f14;">*const i32</span><span>, </span><span style="color:#5597d6;">size</span><span>: </span><span style="color:#668f14;">usize</span><span>) -&gt; </span><span style="color:#668f14;">i32 </span><span>{
+</span><span>    </span><span style="color:#7f8989;">// ...
+</span><span>}
+</span></code></pre>
+<span class="aside_right">
+  <p>In this case both languages use the same name. It is possible to bind a Fortran
+interface to a C function (exported from Rust) with a different name.</p>
+
+</span>
+<p>On the Fortran side we used <code>bind(c)</code> to bind this to a C function with the same
+name:</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">function </span><span style="color:#c23f31;">sum_integer_array</span><span>(</span><span style="color:#5597d6;">data</span><span>, </span><span style="color:#5597d6;">size</span><span>) </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">output</span><span>) bind(c)
+</span><span>    </span><span style="color:#7f8989;">! ...
+</span></code></pre>
+<p>How about the <code>unsafe</code> keyword? Is my code unsafe now? This just means
+that we are leaving the jurisdiction of the Rust borrow checker and it is up to us
+to use this function in a responsible way.</p>
+<h2 id="should-we-not-compile-the-rust-library-as-part-of-cmake">Should we not compile the Rust library as part of CMake?</h2>
+<p>It is possible to instruct CMake to compile the Rust library as part of the
+build process and do everything in one go.</p>
+<p>I prefer to do this separately. It reduces the complexity of <code>CMakeLists.txt</code>
+and it gives me the flexibility to iterate on the Rust code without having to
+recompile/relink the whole project every time I change a tiny thing on the Rust
+side since the Rust code is dynamically linked.</p>
+<h2 id="working-with-arrays">Working with arrays</h2>
+<p>Here we will take it one step further and modify arrays on the Rust side.</p>
+<span class="aside_right">
+  <p>The allocation and deallocation of memory is managed by Fortran. It would
+be possible to allocate Rust-side and return a pointer to Fortran but I find
+it easier to let Fortran manage the memory for arrays used in Fortran.</p>
+
+</span>
+<p>This is the Rust code (<code>rust/src/lib.rs</code>):</p>
+<pre data-lang="rust" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#7f8989;">/// # Safety
+</span><span style="color:#7f8989;">///
+</span><span style="color:#7f8989;">/// Function assumes that the input data is a valid pointer to an array and that the
+</span><span style="color:#7f8989;">/// array size matches the `size` parameter.
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub unsafe </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">sum_integer_array</span><span>(</span><span style="color:#5597d6;">data</span><span>: </span><span style="color:#668f14;">*const i32</span><span>, </span><span style="color:#5597d6;">size</span><span>: </span><span style="color:#668f14;">usize</span><span>) -&gt; </span><span style="color:#668f14;">i32 </span><span>{
+</span><span>    </span><span style="color:#72ab00;">if</span><span> data.</span><span style="color:#b39f04;">is_null</span><span>() {
+</span><span>        </span><span style="color:#72ab00;">return </span><span style="color:#b3933a;">0</span><span>;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#668f14;">let</span><span> slice </span><span style="color:#72ab00;">= </span><span style="color:#668f14;">unsafe </span><span>{ std::slice::from_raw_parts(data, size) };
+</span><span>
+</span><span>    slice.</span><span style="color:#b39f04;">iter</span><span>().</span><span style="color:#b39f04;">sum</span><span>()
+</span><span>}
+</span><span>
+</span><span style="color:#7f8989;">/// # Safety
+</span><span style="color:#7f8989;">///
+</span><span style="color:#7f8989;">/// Function assumes that the input data is a valid pointer to an array and that the
+</span><span style="color:#7f8989;">/// array size matches the `size` parameter.
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub unsafe </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">modify_array</span><span>(</span><span style="color:#5597d6;">data</span><span>: </span><span style="color:#668f14;">*mut i32</span><span>, </span><span style="color:#5597d6;">size</span><span>: </span><span style="color:#668f14;">usize</span><span>) {
+</span><span>    </span><span style="color:#72ab00;">if</span><span> data.</span><span style="color:#b39f04;">is_null</span><span>() {
+</span><span>        </span><span style="color:#72ab00;">return</span><span>;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#668f14;">let</span><span> slice </span><span style="color:#72ab00;">= </span><span style="color:#668f14;">unsafe </span><span>{ std::slice::from_raw_parts_mut(data, size) };
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">for</span><span> element </span><span style="color:#72ab00;">in</span><span> slice {
+</span><span>        </span><span style="color:#72ab00;">*</span><span>element </span><span style="color:#72ab00;">*= </span><span style="color:#b3933a;">2</span><span>;
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#7f8989;">/// # Safety
+</span><span style="color:#7f8989;">///
+</span><span style="color:#7f8989;">/// Function assumes that the input data is a valid pointer to an array and that the
+</span><span style="color:#7f8989;">/// array size matches the `size` parameter.
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub unsafe </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">check_array_order</span><span>(</span><span style="color:#5597d6;">data</span><span>: </span><span style="color:#668f14;">*const f64</span><span>, </span><span style="color:#5597d6;">size</span><span>: </span><span style="color:#668f14;">usize</span><span>) {
+</span><span>    </span><span style="color:#72ab00;">if</span><span> data.</span><span style="color:#b39f04;">is_null</span><span>() {
+</span><span>        </span><span style="color:#72ab00;">return</span><span>;
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#668f14;">let</span><span> slice </span><span style="color:#72ab00;">= </span><span style="color:#668f14;">unsafe </span><span>{ std::slice::from_raw_parts(data, size) };
+</span><span>
+</span><span>    </span><span style="color:#668f14;">let</span><span> n </span><span style="color:#72ab00;">=</span><span> size </span><span style="color:#72ab00;">/ </span><span style="color:#b3933a;">3</span><span>;
+</span><span>    </span><span style="color:#668f14;">let mut</span><span> result </span><span style="color:#72ab00;">= </span><span style="color:#a2a001;">vec!</span><span>[[</span><span style="color:#b3933a;">0.0</span><span>; </span><span style="color:#b3933a;">3</span><span>]; n];
+</span><span>
+</span><span>    </span><span style="color:#7f8989;">// copy values from fortran-order into row-major representation
+</span><span>    </span><span style="color:#72ab00;">for</span><span> i </span><span style="color:#72ab00;">in </span><span style="color:#b3933a;">0</span><span style="color:#72ab00;">..</span><span>n {
+</span><span>        result[i][</span><span style="color:#b3933a;">0</span><span>] </span><span style="color:#72ab00;">=</span><span> slice[i];
+</span><span>        result[i][</span><span style="color:#b3933a;">1</span><span>] </span><span style="color:#72ab00;">=</span><span> slice[i </span><span style="color:#72ab00;">+</span><span> n];
+</span><span>        result[i][</span><span style="color:#b3933a;">2</span><span>] </span><span style="color:#72ab00;">=</span><span> slice[i </span><span style="color:#72ab00;">+ </span><span style="color:#b3933a;">2 </span><span style="color:#72ab00;">*</span><span> n];
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#a2a001;">dbg!</span><span>(result);
+</span><span>}
+</span></code></pre>
+<span class="aside_right">
+  <p>No surprises here.</p>
+
+</span>
+<p>This is the interface (<code>interface.f90</code>):</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">module </span><span style="color:#c23f31;">rust_interface
+</span><span>
+</span><span>    use, intrinsic </span><span style="color:#72ab00;">::</span><span> iso_c_binding, only: c_int32_t, c_double
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">interface
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">sum_integer_array</span><span>(</span><span style="color:#5597d6;">data</span><span>, </span><span style="color:#5597d6;">size</span><span>) </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">output</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_int32_t
+</span><span>            integer(c_int32_t), intent(in) </span><span style="color:#72ab00;">:: </span><span>data(</span><span style="color:#72ab00;">*</span><span>)
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> si</span><span style="color:#b3933a;">ze
+</span><span>            integer(c_int32_t) </span><span style="color:#72ab00;">::</span><span> output
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">modify_array</span><span>(</span><span style="color:#5597d6;">data</span><span>, </span><span style="color:#5597d6;">size</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_int32_t
+</span><span>            integer(c_int32_t), intent(inout) </span><span style="color:#72ab00;">:: </span><span>data(</span><span style="color:#72ab00;">*</span><span>)
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> si</span><span style="color:#b3933a;">ze
+</span><span>        </span><span style="color:#72ab00;">end subroutine
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">check_array_order</span><span>(</span><span style="color:#5597d6;">data</span><span>, </span><span style="color:#5597d6;">size</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_double, c_int32_t
+</span><span>            </span><span style="color:#b39f04;">real</span><span>(c_double), intent(in) </span><span style="color:#72ab00;">:: </span><span>data(</span><span style="color:#72ab00;">*</span><span>)
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> si</span><span style="color:#b3933a;">ze
+</span><span>        </span><span style="color:#72ab00;">end subroutine
+</span><span>    </span><span style="color:#72ab00;">end interface
+</span><span>
+</span><span style="color:#72ab00;">end module
+</span></code></pre>
+<span class="aside_right">
+  <p>The two interesting calls are highlighted.</p>
+
+</span>
+<p>Finally, the Fortran code (<code>example.f90</code>):</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">program </span><span style="color:#c23f31;">example
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">use </span><span style="color:#668f14;">rust_interface
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    integer, allocatable </span><span style="color:#72ab00;">:: </span><span>integer_array_1d(:)
+</span><span>    integer, allocatable </span><span style="color:#72ab00;">:: </span><span>integer_array_2d(:, :)
+</span><span>    </span><span style="color:#b39f04;">real</span><span>(</span><span style="color:#b3933a;">8</span><span>), allocatable </span><span style="color:#72ab00;">:: </span><span>array_doubles(:, :)
+</span><span>
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">allocate</span><span>(</span><span style="color:#5597d6;">integer_array_1d</span><span>(</span><span style="color:#b3933a;">5</span><span>))
+</span><span>    integer_array_1d </span><span style="color:#72ab00;">= </span><span>[</span><span style="color:#b3933a;">1</span><span>, </span><span style="color:#b3933a;">2</span><span>, </span><span style="color:#b3933a;">3</span><span>, </span><span style="color:#b3933a;">4</span><span>, </span><span style="color:#b3933a;">5</span><span>]
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;sum of 1D array:&quot;</span><span>, </span><span style="color:#da5d42;">&amp;
+</span><span>            sum_integer_array(integer_array_1d, </span><span style="color:#b39f04;">size</span><span>(integer_array_1d))
+</span><span>
+</span><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">modify_array</span><span>(integer_array_1d, </span><span style="color:#b39f04;">size</span><span>(integer_array_1d))
+</span></mark><span>
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;after modification:&quot;</span><span>, </span><span style="color:#da5d42;">&amp;
+</span><span>            sum_integer_array(integer_array_1d, </span><span style="color:#b39f04;">size</span><span>(integer_array_1d))
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">deallocate</span><span>(</span><span style="color:#5597d6;">integer_array_1d</span><span>)
+</span><span>
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">allocate</span><span>(</span><span style="color:#5597d6;">array_doubles</span><span>(</span><span style="color:#b3933a;">2</span><span>, </span><span style="color:#b3933a;">3</span><span>))
+</span><span>
+</span><span>    array_doubles(</span><span style="color:#b3933a;">1</span><span>, </span><span style="color:#b3933a;">1</span><span>) </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">1.0d0
+</span><span>    array_doubles(</span><span style="color:#b3933a;">1</span><span>, </span><span style="color:#b3933a;">2</span><span>) </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">2.0d0
+</span><span>    array_doubles(</span><span style="color:#b3933a;">1</span><span>, </span><span style="color:#b3933a;">3</span><span>) </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">3.0d0
+</span><span>    array_doubles(</span><span style="color:#b3933a;">2</span><span>, </span><span style="color:#b3933a;">1</span><span>) </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">4.0d0
+</span><span>    array_doubles(</span><span style="color:#b3933a;">2</span><span>, </span><span style="color:#b3933a;">2</span><span>) </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">5.0d0
+</span><span>    array_doubles(</span><span style="color:#b3933a;">2</span><span>, </span><span style="color:#b3933a;">3</span><span>) </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">6.0d0
+</span><span>
+</span><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">check_array_order</span><span>(array_doubles, </span><span style="color:#b39f04;">size</span><span>(array_doubles))
+</span></mark><span>
+</span><span>    </span><span style="color:#b39f04;">deallocate</span><span>(</span><span style="color:#5597d6;">array_doubles</span><span>)
+</span><span>
+</span><span style="color:#72ab00;">end program
+</span></code></pre>
+<p>To get the same order of elements in the 2D array on the Rust and Fortran side,
+I had to reorder the elements in the Rust code:</p>
+<pre data-lang="txt" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-txt "><code class="language-txt" data-lang="txt"><span>sum of 1D array:          15
+</span><span>after modification:          30
+</span><span>
+</span><span>[src/lib.rs:55:5] result = [
+</span><span>    [
+</span><span>        1.0,
+</span><span>        2.0,
+</span><span>        3.0,
+</span><span>    ],
+</span><span>    [
+</span><span>        4.0,
+</span><span>        5.0,
+</span><span>        6.0,
+</span><span>    ],
+</span><span>]
+</span></code></pre>
+<h2 id="maintaining-a-context-on-the-rust-side">Maintaining a context on the Rust side</h2>
+<span class="aside_right">
+  <p>In my real-world case I wanted to initialize a priority queue once and then
+query it a million times.</p>
+
+</span>
+<p>In the next example I wanted to initialize/allocate some data in Rust once,
+then query the code many times, and finalize/deallocate at the end:</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">program </span><span style="color:#c23f31;">example
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">use </span><span style="color:#668f14;">rust_interface
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">initialize</span><span>()
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;result of query:&quot;</span><span>, query()
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;result of query:&quot;</span><span>, query()
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;result of query:&quot;</span><span>, query()
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;result of query:&quot;</span><span>, query()
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, </span><span style="color:#d07711;">&quot;result of query:&quot;</span><span>, query()
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">finalize</span><span>()
+</span><span>
+</span><span style="color:#72ab00;">end program
+</span></code></pre>
+<p>This is the interface (<code>interface.f90</code>):</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">module </span><span style="color:#c23f31;">rust_interface
+</span><span>
+</span><span>    use, intrinsic </span><span style="color:#72ab00;">::</span><span> iso_c_binding, only: c_int32_t
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">interface
+</span><span>        </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">initialize</span><span>() bind(c)
+</span><span>        </span><span style="color:#72ab00;">end subroutine
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">query</span><span>() </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">output</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_int32_t
+</span><span>            integer(c_int32_t) </span><span style="color:#72ab00;">::</span><span> output
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">finalize</span><span>() bind(c)
+</span><span>        </span><span style="color:#72ab00;">end subroutine
+</span><span>    </span><span style="color:#72ab00;">end interface
+</span><span>
+</span><span style="color:#72ab00;">end module
+</span></code></pre>
+<p>On the Rust side I achieved this by using <a href="https://crates.io/crates/once_cell">once_cell
+crate</a> which will hold the context/state
+across the queries:</p>
+<pre data-lang="toml" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-toml "><code class="language-toml" data-lang="toml"><span>[</span><span style="color:#6486ab;">package</span><span>]
+</span><span style="color:#7f902a;">name </span><span>= </span><span style="color:#d07711;">&quot;rust&quot;
+</span><span style="color:#7f902a;">version </span><span>= </span><span style="color:#d07711;">&quot;0.1.0&quot;
+</span><span style="color:#7f902a;">edition </span><span>= </span><span style="color:#d07711;">&quot;2024&quot;
+</span><span>
+</span><span>[</span><span style="color:#6486ab;">lib</span><span>]
+</span><span style="color:#7f902a;">crate-type </span><span>= [</span><span style="color:#d07711;">&quot;cdylib&quot;</span><span>]
+</span><span>
+</span><span>[</span><span style="color:#6486ab;">dependencies</span><span>]
+</span><mark style="background-color:#c7c7bf2e;"><span style="color:#7f902a;">once_cell </span><span>= </span><span style="color:#d07711;">&quot;1.21.1&quot;
+</span></mark></code></pre>
+<span class="aside_right">
+  <p>The <code>struct State</code> holds the context/state and the code makes sure that I can
+only have one instance of it at a time.</p>
+<p>Later I will show examples where we can maintain multiple contexts.</p>
+
+</span>
+<p>This is the Rust code (<code>rust/src/lib.rs</code>):</p>
+<pre data-lang="rust" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#72ab00;">use </span><span>once_cell::sync::Lazy;
+</span><span style="color:#72ab00;">use </span><span>std::sync::Mutex;
+</span><span>
+</span><span style="color:#668f14;">static </span><span style="color:#b3933a;">GLOBAL_STATE</span><span>: Lazy&lt;Mutex&lt;</span><span style="color:#a2a001;">Option</span><span>&lt;State&gt;&gt;&gt; </span><span style="color:#72ab00;">=
+</span><span>    Lazy::new(|| Mutex::new(</span><span style="color:#a2a001;">Some</span><span>(State { value: </span><span style="color:#b3933a;">0 </span><span>})));
+</span><span>
+</span><span style="color:#668f14;">struct </span><span style="color:#c23f31;">State </span><span>{
+</span><span>    </span><span style="color:#5597d6;">value</span><span>: </span><span style="color:#668f14;">i32</span><span>,
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">initialize</span><span>() {
+</span><span>    </span><span style="color:#668f14;">let mut</span><span> state </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">GLOBAL_STATE</span><span>.</span><span style="color:#b39f04;">lock</span><span>().</span><span style="color:#b39f04;">unwrap</span><span>();
+</span><span>    </span><span style="color:#72ab00;">*</span><span>state </span><span style="color:#72ab00;">= </span><span style="color:#a2a001;">Some</span><span>(State { value: </span><span style="color:#b3933a;">42 </span><span>});
+</span><span>    </span><span style="color:#a2a001;">println!</span><span>(</span><span style="color:#d07711;">&quot;initialized&quot;</span><span>);
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">query</span><span>() -&gt; </span><span style="color:#668f14;">i32 </span><span>{
+</span><span>    </span><span style="color:#668f14;">let</span><span> state </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">GLOBAL_STATE</span><span>.</span><span style="color:#b39f04;">lock</span><span>().</span><span style="color:#b39f04;">unwrap</span><span>();
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">match</span><span> state.</span><span style="color:#b39f04;">as_ref</span><span>() {
+</span><span>        </span><span style="color:#a2a001;">Some</span><span>(s) </span><span style="color:#72ab00;">=&gt;</span><span> s.value,
+</span><span>        </span><span style="color:#a2a001;">None </span><span style="color:#72ab00;">=&gt; </span><span>{
+</span><span>            </span><span style="color:#a2a001;">println!</span><span>(</span><span style="color:#d07711;">&quot;query failed: state is uninitialized&quot;</span><span>);
+</span><span>            </span><span style="color:#72ab00;">-</span><span style="color:#b3933a;">1 </span><span style="color:#7f8989;">// return an error code or default value
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">finalize</span><span>() {
+</span><span>    </span><span style="color:#668f14;">let mut</span><span> state </span><span style="color:#72ab00;">= </span><span style="color:#b3933a;">GLOBAL_STATE</span><span>.</span><span style="color:#b39f04;">lock</span><span>().</span><span style="color:#b39f04;">unwrap</span><span>();
+</span><span>    </span><span style="color:#72ab00;">*</span><span>state </span><span style="color:#72ab00;">= </span><span style="color:#a2a001;">None</span><span>; </span><span style="color:#7f8989;">// drop the data
+</span><span>    </span><span style="color:#a2a001;">println!</span><span>(</span><span style="color:#d07711;">&quot;finalized and deallocated&quot;</span><span>);
+</span><span>}
+</span></code></pre>
+<h2 id="example-using-rust-s-hashmap-in-fortran">Example: Using Rust's HashMap in Fortran</h2>
+<p>In the next example I want to be able to allocate and hold some data structures
+on the Rust side, and then query and modify them from Fortran. And I want to be
+able to have more than one instance of these data structures.</p>
+<span class="aside_left">
+  <p>HashMap is one of those data structures that I miss most in Fortran.</p>
+
+</span>
+<span class="aside_right">
+  <p>In the Rust code example I was lazy writing the actual safety notices.</p>
+
+</span>
+<p>The example data structure will be a HashMap but we can imagine something more
+involved (<code>rust/src/lib.rs</code>):</p>
+<pre data-lang="rust" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#72ab00;">use </span><span>std::collections::HashMap;
+</span><span>
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">create_map</span><span>() -&gt; </span><span style="color:#668f14;">*mut </span><span>HashMap&lt;</span><span style="color:#668f14;">i32</span><span>, </span><span style="color:#668f14;">i32</span><span>&gt; {
+</span><span>    </span><span style="color:#a2a001;">Box</span><span>::into_raw(</span><span style="color:#a2a001;">Box</span><span>::new(HashMap::new()))
+</span><span>}
+</span><span>
+</span><span style="color:#7f8989;">/// # Safety
+</span><span style="color:#7f8989;">///
+</span><span style="color:#7f8989;">/// Safety notice needed here.
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub unsafe </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">insert_into_map</span><span>(</span><span style="color:#5597d6;">map_ptr</span><span>: </span><span style="color:#668f14;">*mut </span><span>HashMap&lt;</span><span style="color:#668f14;">i32</span><span>, </span><span style="color:#668f14;">i32</span><span>&gt;, </span><span style="color:#5597d6;">key</span><span>: </span><span style="color:#668f14;">i32</span><span>, </span><span style="color:#5597d6;">value</span><span>: </span><span style="color:#668f14;">i32</span><span>) {
+</span><span>    </span><span style="color:#72ab00;">if</span><span> map_ptr.</span><span style="color:#b39f04;">is_null</span><span>() {
+</span><span>        </span><span style="color:#72ab00;">return</span><span>;
+</span><span>    }
+</span><span>    </span><span style="color:#668f14;">let</span><span> map </span><span style="color:#72ab00;">= </span><span style="color:#668f14;">unsafe </span><span>{ </span><span style="color:#72ab00;">&amp;</span><span style="color:#668f14;">mut </span><span style="color:#72ab00;">*</span><span>map_ptr };
+</span><span>    map.</span><span style="color:#b39f04;">insert</span><span>(key, value);
+</span><span>}
+</span><span>
+</span><span style="color:#7f8989;">/// # Safety
+</span><span style="color:#7f8989;">///
+</span><span style="color:#7f8989;">/// Safety notice needed here.
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub unsafe </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">get_from_map</span><span>(</span><span style="color:#5597d6;">map_ptr</span><span>: </span><span style="color:#668f14;">*mut </span><span>HashMap&lt;</span><span style="color:#668f14;">i32</span><span>, </span><span style="color:#668f14;">i32</span><span>&gt;, </span><span style="color:#5597d6;">key</span><span>: </span><span style="color:#668f14;">i32</span><span>) -&gt; </span><span style="color:#668f14;">i32 </span><span>{
+</span><span>    </span><span style="color:#72ab00;">if</span><span> map_ptr.</span><span style="color:#b39f04;">is_null</span><span>() {
+</span><span>        </span><span style="color:#72ab00;">return -</span><span style="color:#b3933a;">1</span><span>; </span><span style="color:#7f8989;">// return -1 if the map is null
+</span><span>    }
+</span><span>    </span><span style="color:#668f14;">let</span><span> map </span><span style="color:#72ab00;">= </span><span style="color:#668f14;">unsafe </span><span>{ </span><span style="color:#72ab00;">&amp;</span><span style="color:#668f14;">mut </span><span style="color:#72ab00;">*</span><span>map_ptr };
+</span><span>    </span><span style="color:#72ab00;">*</span><span>map.</span><span style="color:#b39f04;">get</span><span>(</span><span style="color:#72ab00;">&amp;</span><span>key).</span><span style="color:#b39f04;">unwrap_or</span><span>(</span><span style="color:#72ab00;">&amp;-</span><span style="color:#b3933a;">1</span><span>) </span><span style="color:#7f8989;">// return -1 if key is not found
+</span><span>}
+</span><span>
+</span><span style="color:#7f8989;">/// # Safety
+</span><span style="color:#7f8989;">///
+</span><span style="color:#7f8989;">/// Safety notice needed here.
+</span><span>#[</span><span style="color:#5597d6;">unsafe</span><span>(no_mangle)]
+</span><span style="color:#668f14;">pub unsafe </span><span style="color:#72ab00;">extern </span><span style="color:#d07711;">&quot;C&quot; </span><span style="color:#668f14;">fn </span><span style="color:#c23f31;">destroy_map</span><span>(</span><span style="color:#5597d6;">map_ptr</span><span>: </span><span style="color:#668f14;">*mut </span><span>HashMap&lt;</span><span style="color:#668f14;">i32</span><span>, </span><span style="color:#668f14;">i32</span><span>&gt;) {
+</span><span>    </span><span style="color:#72ab00;">if</span><span> map_ptr.</span><span style="color:#b39f04;">is_null</span><span>() {
+</span><span>        </span><span style="color:#72ab00;">return</span><span>;
+</span><span>    }
+</span><span>    </span><span style="color:#668f14;">unsafe </span><span>{
+</span><span>        </span><span style="color:#b39f04;">drop</span><span>(</span><span style="color:#a2a001;">Box</span><span>::from_raw(map_ptr));
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>This is the interface (<code>interface.f90</code>):</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">module </span><span style="color:#c23f31;">rust_interface
+</span><span>
+</span><span>    use, intrinsic </span><span style="color:#72ab00;">::</span><span> iso_c_binding, only: c_ptr, c_int32_t
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">interface
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">create_map</span><span>() bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_ptr
+</span><span>            type(c_ptr) </span><span style="color:#72ab00;">::</span><span> create_map
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">insert_into_map</span><span>(</span><span style="color:#5597d6;">context</span><span>, </span><span style="color:#5597d6;">key</span><span>, </span><span style="color:#5597d6;">val</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_ptr, c_int32_t
+</span><span>            type(c_ptr), value </span><span style="color:#72ab00;">::</span><span> context
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> key, val
+</span><span>        </span><span style="color:#72ab00;">end subroutine
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">get_from_map</span><span>(</span><span style="color:#5597d6;">context</span><span>, </span><span style="color:#5597d6;">key</span><span>) </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">val</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_ptr, c_int32_t
+</span><span>            type(c_ptr), value </span><span style="color:#72ab00;">::</span><span> context
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> key
+</span><span>            integer(c_int32_t) </span><span style="color:#72ab00;">::</span><span> val
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">destroy_map</span><span>(</span><span style="color:#5597d6;">context</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_ptr
+</span><span>            type(c_ptr), value </span><span style="color:#72ab00;">::</span><span> context
+</span><span>        </span><span style="color:#72ab00;">end subroutine
+</span><span>    </span><span style="color:#72ab00;">end interface
+</span><span>
+</span><span style="color:#72ab00;">end module
+</span></code></pre>
+<p>And here the example Fortran code (<code>example.f90</code>):</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">program </span><span style="color:#c23f31;">example
+</span><span>
+</span><span>    use, intrinsic </span><span style="color:#72ab00;">::</span><span> iso_c_binding, only: c_ptr
+</span><span>    </span><span style="color:#72ab00;">use </span><span style="color:#668f14;">rust_interface
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    type(c_ptr) </span><span style="color:#72ab00;">::</span><span> map1, map2
+</span><span>
+</span><span>    map1 </span><span style="color:#72ab00;">= </span><span>create_map()
+</span><span>    map2 </span><span style="color:#72ab00;">= </span><span>create_map()
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">insert_into_map</span><span>(map1, </span><span style="color:#b3933a;">10</span><span>, </span><span style="color:#b3933a;">100</span><span>)
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">insert_into_map</span><span>(map1, </span><span style="color:#b3933a;">20</span><span>, </span><span style="color:#b3933a;">200</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">insert_into_map</span><span>(map2, </span><span style="color:#b3933a;">20</span><span>, </span><span style="color:#b3933a;">300</span><span>)
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">insert_into_map</span><span>(map2, </span><span style="color:#b3933a;">30</span><span>, </span><span style="color:#b3933a;">400</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, get_from_map(map1, </span><span style="color:#b3933a;">10</span><span>)
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, get_from_map(map1, </span><span style="color:#b3933a;">20</span><span>)
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, get_from_map(map2, </span><span style="color:#b3933a;">20</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#7f8989;">! retrieve a non-existent key
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, get_from_map(map2, </span><span style="color:#b3933a;">99</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, get_from_map(map1, </span><span style="color:#b3933a;">20</span><span>)
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">insert_into_map</span><span>(map1, </span><span style="color:#b3933a;">20</span><span>, </span><span style="color:#b3933a;">222</span><span>)
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, get_from_map(map1, </span><span style="color:#b3933a;">20</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">destroy_map</span><span>(map1)
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">destroy_map</span><span>(map2)
+</span><span>
+</span><span style="color:#72ab00;">end program
+</span></code></pre>
+<h2 id="making-the-hashmap-interface-more-ergonomic">Making the HashMap interface more ergonomic</h2>
+<p>Having the <code>c_ptr</code> exposed on the Fortran side looks a bit awkward. Also notice
+that we are passing the context as an argument to every function.</p>
+<span class="aside_right">
+  <p>In other languages the <code>%</code> symbol would often be a dot.</p>
+
+</span>
+<p>We can try to make this more ergonomic by hiding the <code>c_ptr</code> and make the hash table
+behave more like we interact with such data structures in Rust:</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">program </span><span style="color:#c23f31;">example
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">use </span><span style="color:#668f14;">rust_interface
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><span>    type(map) </span><span style="color:#72ab00;">::</span><span> map1, map2
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map1</span><span>%</span><span style="color:#b39f04;">init</span><span>()
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map2</span><span>%</span><span style="color:#b39f04;">init</span><span>()
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map1</span><span>%</span><span style="color:#b39f04;">insert</span><span>(</span><span style="color:#b3933a;">10</span><span>, </span><span style="color:#b3933a;">100</span><span>)
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map1</span><span>%</span><span style="color:#b39f04;">insert</span><span>(</span><span style="color:#b3933a;">20</span><span>, </span><span style="color:#b3933a;">200</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map2</span><span>%</span><span style="color:#b39f04;">insert</span><span>(</span><span style="color:#b3933a;">20</span><span>, </span><span style="color:#b3933a;">300</span><span>)
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map2</span><span>%</span><span style="color:#b39f04;">insert</span><span>(</span><span style="color:#b3933a;">30</span><span>, </span><span style="color:#b3933a;">400</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, map1</span><span style="color:#72ab00;">%</span><span>get(</span><span style="color:#b3933a;">10</span><span>)
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, map1</span><span style="color:#72ab00;">%</span><span>get(</span><span style="color:#b3933a;">20</span><span>)
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, map2</span><span style="color:#72ab00;">%</span><span>get(</span><span style="color:#b3933a;">20</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#7f8989;">! retrieve a non-existent key
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, map2</span><span style="color:#72ab00;">%</span><span>get(</span><span style="color:#b3933a;">99</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, map1</span><span style="color:#72ab00;">%</span><span>get(</span><span style="color:#b3933a;">20</span><span>)
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map1</span><span>%</span><span style="color:#b39f04;">insert</span><span>(</span><span style="color:#b3933a;">20</span><span>, </span><span style="color:#b3933a;">222</span><span>)
+</span><span>    </span><span style="color:#b39f04;">print </span><span>*, map1</span><span style="color:#72ab00;">%</span><span>get(</span><span style="color:#b3933a;">20</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map1</span><span>%</span><span style="color:#b39f04;">destroy</span><span>()
+</span><span>    </span><span style="color:#72ab00;">call </span><span style="color:#5597d6;">map2</span><span>%</span><span style="color:#b39f04;">destroy</span><span>()
+</span><span>
+</span><span style="color:#72ab00;">end program
+</span></code></pre>
+<p>To implement this <strong>we don't need to change anything on the Rust side</strong>.  The
+necessary changes are highlighted in the interface file (<code>interface.f90</code>):</p>
+<pre data-lang="f90" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-f90 "><code class="language-f90" data-lang="f90"><span style="color:#72ab00;">module </span><span style="color:#c23f31;">rust_interface
+</span><span>
+</span><span>    use, intrinsic </span><span style="color:#72ab00;">::</span><span> iso_c_binding, only: c_ptr, c_int32_t, c_null_ptr
+</span><span>
+</span><span>    </span><span style="color:#72ab00;">implicit none
+</span><span>
+</span><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">type :: </span><span style="color:#c23f31;">map
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        type(c_ptr) </span><span style="color:#72ab00;">::</span><span> handle
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">contains
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        procedure </span><span style="color:#72ab00;">::</span><span> init    </span><span style="color:#72ab00;">=&gt;</span><span> wrap_create_map
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        procedure </span><span style="color:#72ab00;">::</span><span> insert  </span><span style="color:#72ab00;">=&gt;</span><span> wrap_insert_into_map
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        procedure </span><span style="color:#72ab00;">::</span><span> get     </span><span style="color:#72ab00;">=&gt;</span><span> wrap_get_from_map
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        procedure </span><span style="color:#72ab00;">::</span><span> destroy </span><span style="color:#72ab00;">=&gt;</span><span> wrap_destroy_map
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">end type
+</span></mark><span>
+</span><span>    </span><span style="color:#72ab00;">interface
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">create_map</span><span>() bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_ptr
+</span><span>            type(c_ptr) </span><span style="color:#72ab00;">::</span><span> create_map
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">insert_into_map</span><span>(</span><span style="color:#5597d6;">context</span><span>, </span><span style="color:#5597d6;">key</span><span>, </span><span style="color:#5597d6;">val</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_ptr, c_int32_t
+</span><span>            type(c_ptr), value </span><span style="color:#72ab00;">::</span><span> context
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> key, val
+</span><span>        </span><span style="color:#72ab00;">end subroutine
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">get_from_map</span><span>(</span><span style="color:#5597d6;">context</span><span>, </span><span style="color:#5597d6;">key</span><span>) </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">val</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_ptr, c_int32_t
+</span><span>            type(c_ptr), value </span><span style="color:#72ab00;">::</span><span> context
+</span><span>            integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> key
+</span><span>            integer(c_int32_t) </span><span style="color:#72ab00;">::</span><span> val
+</span><span>        </span><span style="color:#72ab00;">end function
+</span><span>
+</span><span>        </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">destroy_map</span><span>(</span><span style="color:#5597d6;">context</span><span>) bind(c)
+</span><span>            </span><span style="color:#72ab00;">import ::</span><span> c_ptr
+</span><span>            type(c_ptr), value </span><span style="color:#72ab00;">::</span><span> context
+</span><span>        </span><span style="color:#72ab00;">end subroutine
+</span><span>    </span><span style="color:#72ab00;">end interface
+</span><span>
+</span><mark style="background-color:#c7c7bf2e;"><span style="color:#72ab00;">contains
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">wrap_create_map</span><span>(</span><span style="color:#5597d6;">this</span><span>)
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        class(map), intent(out) </span><span style="color:#72ab00;">::</span><span> this
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        this</span><span style="color:#72ab00;">%</span><span>handle </span><span style="color:#72ab00;">= </span><span>create_map()
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">end subroutine
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">wrap_insert_into_map</span><span>(</span><span style="color:#5597d6;">this</span><span>, </span><span style="color:#5597d6;">key</span><span>, </span><span style="color:#5597d6;">val</span><span>)
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        class(map), intent(inout) </span><span style="color:#72ab00;">::</span><span> this
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> key, val
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">insert_into_map</span><span>(this</span><span style="color:#72ab00;">%</span><span>handle, key, val)
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">end subroutine
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">function </span><span style="color:#c23f31;">wrap_get_from_map</span><span>(</span><span style="color:#5597d6;">this</span><span>, </span><span style="color:#5597d6;">key</span><span>) </span><span style="color:#72ab00;">result</span><span>(</span><span style="color:#5597d6;">val</span><span>)
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        class(map), intent(in) </span><span style="color:#72ab00;">::</span><span> this
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        integer(c_int32_t), intent(in), value </span><span style="color:#72ab00;">::</span><span> key
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        integer(c_int32_t) </span><span style="color:#72ab00;">::</span><span> val
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        </span><span style="color:#7f8989;">! no error handling if key is not found
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        val </span><span style="color:#72ab00;">= </span><span>get_from_map(this</span><span style="color:#72ab00;">%</span><span>handle, key)
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">end function
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">subroutine </span><span style="color:#c23f31;">wrap_destroy_map</span><span>(</span><span style="color:#5597d6;">this</span><span>)
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        class(map), intent(inout) </span><span style="color:#72ab00;">::</span><span> this
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        </span><span style="color:#72ab00;">call </span><span style="color:#b39f04;">destroy_map</span><span>(this</span><span style="color:#72ab00;">%</span><span>handle)
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>        this</span><span style="color:#72ab00;">%</span><span>handle </span><span style="color:#72ab00;">=</span><span> c_null_ptr
+</span></mark><mark style="background-color:#c7c7bf2e;"><span>    </span><span style="color:#72ab00;">end subroutine
+</span></mark><span>
+</span><span style="color:#72ab00;">end module
+</span></code></pre>
+<p>Nice! And of course many more improvements are possible but now we have the
+tools. <strong>Now go and have fun using Rust from Fortran! The world is your oyster.</strong></p>
+<h2 id="checking-for-memory-leaks">Checking for memory leaks</h2>
+<p>I used <a href="https://valgrind.org/">Valgrind</a> to check whether any of the solutions
+leak memory:</p>
+<pre data-lang="bash" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#5597d6;">$</span><span> valgrind</span><span style="color:#5597d6;"> --leak-check</span><span style="color:#72ab00;">=</span><span>full</span><span style="color:#5597d6;"> --show-leak-kinds</span><span style="color:#72ab00;">=</span><span>all</span><span style="color:#5597d6;"> --track-origins</span><span style="color:#72ab00;">=</span><span>yes ./example
+</span></code></pre>
+<h2 id="maybe-you-prefer-the-rust-library-in-the-build-dir">Maybe you prefer the Rust library in the build dir?</h2>
+<p>Instead of this (writes to <code>rust/target/</code>):</p>
+<pre data-lang="bash" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#5597d6;">$</span><span> cd rust
+</span><span style="color:#5597d6;">$</span><span> cargo build</span><span style="color:#5597d6;"> --release
+</span></code></pre>
+<p>You can also do this (writes to <code>build/target/</code>):</p>
+<pre data-lang="bash" style="background-color:#f5f5f5;color:#1f1f1f;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#5597d6;">$</span><span> cd build
+</span><span style="color:#5597d6;">$</span><span> cargo build</span><span style="color:#5597d6;"> --release </span><span>\
+</span><span style="color:#5597d6;">              --manifest-path</span><span> ../src/rust/Cargo.toml \
+</span><span style="color:#5597d6;">              --target-dir </span><span>$(</span><span style="color:#5597d6;">pwd</span><span>)/target
+</span></code></pre>
+<h2 id="versions-used-to-test-the-code-examples">Versions used to test the code examples</h2>
+<ul>
+<li>Rust 1.85.0</li>
+<li>CMake 3.30.5</li>
+<li>GNU Fortran (GCC) 13.3.0</li>
+</ul>
+
+
+  </article>
+</div>
+
+      </div>
+
+      <div class="uk-margin-large-top">
+        <hr>
+        <div class="site-footer">
+  <ul class="uk-iconnav uk-text-muted">
+    <li class="uk-margin-large-right uk-text-small">
+      <b>(c) Radovan Bast</b>, all rights reserved
+    </li>
+
+    <li class="uk-margin-large-right">
+      <a href="mailto:*firstname@radovan.xyz"
+         uk-icon="icon: mail">
+        *firstname@radovan.xyz
+      </a>
+    </li>
+
+    <li class="uk-margin-large-right">
+      <a href="https://bsky.app/profile/radovan.xyz"
+         target="_blank"
+         uk-icon="icon: bluesky">
+        @radovan.xyz
+      </a>
+    </li>
+
+    <li class="uk-margin-large-right">
+      <a href="https://fosstodon.org/@radovan"
+         target="_blank"
+         uk-icon="icon: mastodon">
+        @radovan@fosstodon.org
+      </a>
+    </li>
+
+    <li class="uk-margin-large-right">
+      <a href="https://github.com/bast"
+         target="_blank"
+         uk-icon="icon: github">
+        @bast
+      </a>
+    </li>
+  </ul>
+</div>
+
+      </div>
+
+    </div>
+  </body>
+</html>
