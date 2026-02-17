@@ -323,6 +323,8 @@ sections:
         text: 21 Lessons From 14 Years at Google
       - url: https://blog.frost.kiwi/
         text: FrostKiwi's Secrets
+      - url: https://www.iankduncan.com/engineering
+        text: Ian Duncan
   - name: Photography
     links:
       - url: http://edelmangallery.com/exhibitions-and-projects/exhibition-pages/2014/sandro-miller-malkovich,-malkovich,-malkovich-homage-to-photographic-masters.html
