@@ -413,6 +413,8 @@ sections:
         text: mathpuzzle
   - name: Python
     links:
+      - url: https://greenteapress.com/thinkpython2/html/index.html
+        text: "Think Python: How to Think Like a Computer Scientist"
       - url: https://www.pyopensci.org/
         text: pyOpenSci
       - url: https://learn.scientific-python.org/development/
